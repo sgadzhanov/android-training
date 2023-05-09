@@ -31,8 +31,9 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.firsttask.EMAIL
-import com.example.firsttask.PASSWORD
+
+const val EMAIL: String = "stamat@abv.bg"
+const val PASSWORD: String = "123123"
 
 @Composable
 fun Login(loginHandler: () -> Unit = {}) {

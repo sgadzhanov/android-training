@@ -1,4 +1,4 @@
-package com.example.firsttask
+package com.example.mobiletraining
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -16,14 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.mobiletraining.Login
-import com.example.mobiletraining.ProductDetails
 import com.example.mobiletraining.ui.theme.MobileTrainingTheme
-
-//import com.example.firsttask.ui.theme.MobileTraining
-
-const val EMAIL: String = "stamat@abv.bg"
-const val PASSWORD: String = "123123"
 
 class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
