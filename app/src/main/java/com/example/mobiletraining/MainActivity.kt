@@ -23,7 +23,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MobileTrainingTheme{
+            MobileTrainingTheme {
                 val navController = rememberNavController()
                 Surface(
                     modifier = Modifier.fillMaxSize(),

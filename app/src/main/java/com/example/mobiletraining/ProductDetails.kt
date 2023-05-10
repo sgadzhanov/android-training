@@ -46,15 +46,13 @@ fun ProductDetails(goBackHandler: () -> Unit = {}) {
             TopAppBar(
                 title = { Text("Item") },
                 navigationIcon = {
-                    IconButton(onClick = { goBackHandler() }) {
+                    IconButton(onClick = { /*TODO*/ }, enabled = false) {
                         Icon(Icons.Default.ArrowBack, contentDescription = "Back")
                     }
                 },
                 actions = {
-                    BadgedBox(badge = { Text("3") }) {
-                        IconButton(onClick = { /*TODO*/ }) {
-                            Icon(Icons.Default.ShoppingBasket, contentDescription = "Bag")
-                        }
+                    IconButton(onClick = { /*TODO*/ }) {
+                        Icon(Icons.Default.ShoppingBasket, contentDescription = "Bag")
                     }
                 }
             )
