@@ -3,6 +3,7 @@ package com.example.mobiletraining
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,9 +16,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.ShoppingBasket
+import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.icons.filled.Star
-import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -33,6 +33,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.firsttask.R
@@ -44,7 +45,13 @@ fun ProductDetails(goBackHandler: () -> Unit = {}) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Item") },
+                title = {
+                    Text(
+                        text = "Item",
+                        modifier = Modifier.fillMaxWidth(),
+                        textAlign = TextAlign.Center
+                    )
+                },
                 navigationIcon = {
                     IconButton(onClick = { /*TODO*/ }, enabled = false) {
                         Icon(Icons.Default.ArrowBack, contentDescription = "Back")
@@ -52,7 +59,7 @@ fun ProductDetails(goBackHandler: () -> Unit = {}) {
                 },
                 actions = {
                     IconButton(onClick = { /*TODO*/ }) {
-                        Icon(Icons.Default.ShoppingBasket, contentDescription = "Bag")
+                        Icon(Icons.Default.ShoppingCart, contentDescription = "Bag")
                     }
                 }
             )
