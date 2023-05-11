@@ -39,44 +39,38 @@ const val PASSWORD: String = "123123"
 fun Login(loginHandler: () -> Unit = {}) {
     val (email, setEmail) = remember { mutableStateOf("") }
     val (password, setPassword) = remember { mutableStateOf("") }
-    val (emailBorder, setEmailBorder) = remember { mutableStateOf(Color.Gray) }
-    val (passwordBorder, setPasswordBorder) = remember { mutableStateOf(Color.Gray) }
+    val (emailIsValid, setEmailIsValid) = remember { mutableStateOf(true) }
+    val (passwordIsValid, setPasswordIsValid) = remember { mutableStateOf(true) }
 
-    Column(
-        modifier = Modifier
-            .padding(6.dp)
-
-    ) {
+    Column(modifier = Modifier.padding(6.dp)) {
         LoginTitle()
         EmailTextField(
             email = email,
             setEmailValue = { setEmail(it) },
-            borderColor = emailBorder,
-            resetBorderColor = { setEmailBorder(Color.Gray) }
+            isValidEmail = emailIsValid,
+            resetBorderColor = { setEmailIsValid(true) }
         )
         PasswordTextField(
             password = password,
             setPassword = { setPassword(it) },
-            borderColor = passwordBorder,
-            resetBorderColor = { setPasswordBorder(Color.Gray) }
+            isValidPassword = passwordIsValid,
+            resetBorderColor = { setPasswordIsValid(true) }
         )
 
         ErrorMessage(
-            emailIsValid = emailBorder == Color.Gray,
-            passwordIsValid = passwordBorder == Color.Gray
+            emailIsValid = emailIsValid,
+            passwordIsValid = passwordIsValid,
         )
 
         Button(
             modifier = Modifier.fillMaxWidth(),
-            enabled = emailBorder == Color.Gray && passwordBorder == Color.Gray,
+            enabled = emailIsValid && passwordIsValid,
             onClick = {
                 if (isValidPassword(password) && isValidEmail(email)) {
                     loginHandler()
                 }
-                setEmailBorder(if (isValidEmail(email)) Color.Gray else Color.Red)
-                setPasswordBorder(if (isValidPassword(password)) Color.Gray else Color.Red)
-                println("email: $email, password: $password")
-                setEmail("")
+                setEmailIsValid(isValidEmail(email))
+                setPasswordIsValid(isValidPassword(password))
                 setPassword("")
             }) {
             Text("Log in", style = TextStyle(fontWeight = FontWeight.Bold))
@@ -89,7 +83,7 @@ fun Login(loginHandler: () -> Unit = {}) {
 private fun EmailTextField(
     email: String,
     setEmailValue: (String) -> Unit,
-    borderColor: Color,
+    isValidEmail: Boolean,
     resetBorderColor: (Color) -> Unit,
 ) {
 
@@ -102,10 +96,10 @@ private fun EmailTextField(
         label = { Text("Email") },
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 8.dp, vertical = 4.dp)
+            .padding(bottom = 12.dp, end = 8.dp, start = 8.dp)
             .border(
                 1.dp,
-                color = borderColor,
+                color = if (isValidEmail) Color.Gray else Color.Red,
                 shape = RoundedCornerShape(6.dp)
             ),
         singleLine = true,
@@ -115,7 +109,6 @@ private fun EmailTextField(
             unfocusedIndicatorColor = Color.Transparent,
         )
     )
-    Spacer(modifier = Modifier.height(10.dp))
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -123,7 +116,7 @@ private fun EmailTextField(
 fun PasswordTextField(
     password: String,
     setPassword: (String) -> Unit,
-    borderColor: Color,
+    isValidPassword: Boolean,
     resetBorderColor: (Color) -> Unit,
 ) {
     val (isVisible, setIsVisible) = remember { mutableStateOf(false) }
@@ -137,10 +130,11 @@ fun PasswordTextField(
         label = { Text("Password") },
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 8.dp, vertical = 4.dp)
+            .padding(horizontal = 8.dp)
+            .padding(bottom = 12.dp)
             .border(
                 1.dp,
-                color = borderColor,
+                color = if (isValidPassword) Color.Gray else Color.Red,
                 shape = RoundedCornerShape(6.dp)
             ),
         textStyle = TextStyle(fontSize = 16.sp),
@@ -159,14 +153,15 @@ fun PasswordTextField(
             unfocusedIndicatorColor = Color.Transparent,
         )
     )
-    Spacer(modifier = Modifier.height(10.dp))
 }
 
 @Composable
 fun LoginTitle() {
-    Spacer(modifier = Modifier.height(100.dp))
-
-    Row(modifier = Modifier.fillMaxWidth()) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 100.dp, bottom = 6.dp)
+    ) {
         Text(
             modifier = Modifier
                 .padding(horizontal = 10.dp),
@@ -174,7 +169,6 @@ fun LoginTitle() {
             style = TextStyle(fontSize = 24.sp, fontWeight = FontWeight.Bold)
         )
     }
-    Spacer(modifier = Modifier.height(10.dp))
 }
 
 @Composable
@@ -182,17 +176,15 @@ fun ErrorMessage(
     emailIsValid: Boolean,
     passwordIsValid: Boolean,
 ) {
-    if (!emailIsValid || !passwordIsValid) {
-        Row {
-            Text(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 8.dp, vertical = 4.dp),
-                text = "Please enter valid email and password.",
-                style = TextStyle(color = Color.Red, fontSize = 18.sp)
-            )
-        }
-        Spacer(modifier = Modifier.height(10.dp))
+    if (emailIsValid && passwordIsValid) return
+    Row {
+        Text(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 8.dp, vertical = 4.dp),
+            text = "Please enter valid email and password.",
+            style = TextStyle(color = Color.Red, fontSize = 18.sp)
+        )
     }
 }
 
