@@ -41,9 +41,7 @@ class MainActivity : ComponentActivity() {
                                 })
                             }
                             composable(route = "ProductDetails") {
-                                ProductDetails(goBackHandler = {
-                                    navController.navigate("Login")
-                                })
+                                ProductDetails()
                             }
                         }
                     }

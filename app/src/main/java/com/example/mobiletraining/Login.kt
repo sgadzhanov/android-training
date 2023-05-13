@@ -1,18 +1,23 @@
 package com.example.mobiletraining
 
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Visibility
 import androidx.compose.material.icons.outlined.VisibilityOff
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -22,58 +27,88 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.firsttask.R
 
 const val EMAIL: String = "stamat@abv.bg"
 const val PASSWORD: String = "123123"
 
 @Composable
+@Preview
 fun Login(loginHandler: () -> Unit = {}) {
-    val (email, setEmail) = remember { mutableStateOf("") }
-    val (password, setPassword) = remember { mutableStateOf("") }
-    val (emailIsValid, setEmailIsValid) = remember { mutableStateOf(true) }
-    val (passwordIsValid, setPasswordIsValid) = remember { mutableStateOf(true) }
+    val email = remember { mutableStateOf("") }
+    val password = remember { mutableStateOf("") }
+    val emailIsValid = remember { mutableStateOf(true) }
+    val passwordIsValid = remember { mutableStateOf(true) }
 
-    Column(modifier = Modifier.padding(6.dp)) {
-        LoginTitle()
-        EmailTextField(
-            email = email,
-            setEmailValue = { setEmail(it) },
-            isValidEmail = emailIsValid,
-            resetBorderColor = { setEmailIsValid(true) }
+    Box(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        Image(
+            painter = painterResource(R.drawable.login__background),
+            modifier = Modifier.fillMaxSize(),
+            contentDescription = "Background Image",
+            contentScale = ContentScale.Crop,
         )
-        PasswordTextField(
-            password = password,
-            setPassword = { setPassword(it) },
-            isValidPassword = passwordIsValid,
-            resetBorderColor = { setPasswordIsValid(true) }
-        )
+        Column(
+            modifier = Modifier
+                .padding(6.dp)
+                .padding(top = 60.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.logo),
+                contentDescription = "logo",
+            )
+            LoginTitle(modifier = Modifier.padding(top = 40.dp, bottom = 10.dp))
+            EmailTextField(
+                email = email.value,
+                setEmailValue = { email.value = it },
+                isValidEmail = emailIsValid.value,
+                resetBorderColor = { emailIsValid.value = true },
+            )
+            PasswordTextField(
+                password = password.value,
+                setPassword = { password.value = it },
+                isValidPassword = passwordIsValid.value,
+                resetBorderColor = { passwordIsValid.value = true },
+            )
 
-        ErrorMessage(
-            emailIsValid = emailIsValid,
-            passwordIsValid = passwordIsValid,
-        )
+            if (!emailIsValid.value || !passwordIsValid.value) {
+                ErrorMessage()
+            }
 
-        Button(
-            modifier = Modifier.fillMaxWidth(),
-            enabled = emailIsValid && passwordIsValid,
-            onClick = {
-                if (isValidPassword(password) && isValidEmail(email)) {
-                    loginHandler()
-                }
-                setEmailIsValid(isValidEmail(email))
-                setPasswordIsValid(isValidPassword(password))
-                setPassword("")
-            }) {
-            Text("Log in", style = TextStyle(fontWeight = FontWeight.Bold))
+            Button(
+                modifier = Modifier
+                    .width(333.dp),
+                enabled = emailIsValid.value && passwordIsValid.value,
+                onClick = {
+                    if (isValidEmail(email.value) && isValidPassword(password.value)) {
+                        loginHandler()
+                    }
+                    emailIsValid.value = isValidEmail(email.value)
+                    passwordIsValid.value = isValidPassword(password.value)
+                    password.value = ""
+                },
+                colors = ButtonDefaults.buttonColors(Color(0xFF47337A)),
+            ) {
+                Text("Log in", style = TextStyle(fontWeight = FontWeight.Bold))
+            }
         }
     }
 }
@@ -86,29 +121,36 @@ private fun EmailTextField(
     isValidEmail: Boolean,
     resetBorderColor: (Color) -> Unit,
 ) {
+    val isFocused = remember { mutableStateOf(false) }
 
-    TextField(
-        value = email,
-        onValueChange = {
-            resetBorderColor(Color.Gray)
-            setEmailValue(it)
-        },
-        label = { Text("Email") },
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(bottom = 12.dp, end = 8.dp, start = 8.dp)
-            .border(
-                1.dp,
-                color = if (isValidEmail) Color.Gray else Color.Red,
-                shape = RoundedCornerShape(6.dp)
+    Row(modifier = Modifier.padding(bottom = 10.dp)) {
+        TextField(
+            value = email,
+            onValueChange = {
+                resetBorderColor(Color.Gray)
+                setEmailValue(it)
+            },
+            label = { Text(text = "Email", style = TextStyle(color = Color.Black)) },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 12.dp, end = 8.dp, start = 8.dp)
+                .border(
+                    1.dp,
+                    color = if (!isValidEmail) Color.Red else if (isFocused.value) Color(0xFF722ED8) else Color.Gray,
+                    shape = RoundedCornerShape(6.dp)
+                )
+                .background(color = Color.Transparent)
+                .alpha(0.4f)
+                .onFocusChanged { isFocused.value = it.isFocused },
+            singleLine = true,
+            colors = TextFieldDefaults.textFieldColors(
+                cursorColor = Color.Black,
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent,
             ),
-        singleLine = true,
-        colors = TextFieldDefaults.textFieldColors(
-            cursorColor = Color.Black,
-            focusedIndicatorColor = Color.Transparent,
-            unfocusedIndicatorColor = Color.Transparent,
+            textStyle = TextStyle(color = Color.Black)
         )
-    )
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -119,31 +161,35 @@ fun PasswordTextField(
     isValidPassword: Boolean,
     resetBorderColor: (Color) -> Unit,
 ) {
-    val (isVisible, setIsVisible) = remember { mutableStateOf(false) }
-
+    val isVisible = remember { mutableStateOf(false) }
+    val isFocused = remember { mutableStateOf(false) }
     TextField(
         value = password,
         onValueChange = {
             resetBorderColor(Color.Gray)
             setPassword(it)
         },
-        label = { Text("Password") },
+        label = { Text("Password", style = TextStyle(color = Color.Black)) },
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 8.dp)
-            .padding(bottom = 12.dp)
             .border(
                 1.dp,
-                color = if (isValidPassword) Color.Gray else Color.Red,
+                color = if (!isValidPassword) Color.Red else if (isFocused.value) Color(0xFF722ED8) else Color.Gray,
                 shape = RoundedCornerShape(6.dp)
-            ),
+            )
+            .background(color = Color.Transparent)
+            .alpha(0.4f)
+            .onFocusChanged { isFocused.value = it.isFocused },
         textStyle = TextStyle(fontSize = 16.sp),
         singleLine = true,
-        visualTransformation = if (isVisible) VisualTransformation.None else PasswordVisualTransformation(),
+        visualTransformation = if (isVisible.value) VisualTransformation.None else PasswordVisualTransformation(),
         trailingIcon = {
-            IconButton(onClick = { setIsVisible(!isVisible) }) {
+            IconButton(
+                onClick = { isVisible.value = !isVisible.value }
+            ) {
                 val icon: ImageVector =
-                    if (isVisible) Icons.Outlined.VisibilityOff else Icons.Outlined.Visibility
+                    if (isVisible.value) Icons.Outlined.VisibilityOff else Icons.Outlined.Visibility
                 Icon(icon, contentDescription = "tease password")
             }
         },
@@ -151,32 +197,31 @@ fun PasswordTextField(
             cursorColor = Color.Black,
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent,
-        )
+        ),
     )
 }
 
 @Composable
-fun LoginTitle() {
+fun LoginTitle(modifier: Modifier = Modifier) {
     Row(
-        modifier = Modifier
+        modifier
             .fillMaxWidth()
-            .padding(top = 100.dp, bottom = 6.dp)
     ) {
         Text(
             modifier = Modifier
                 .padding(horizontal = 10.dp),
             text = "Log in",
-            style = TextStyle(fontSize = 24.sp, fontWeight = FontWeight.Bold)
+            style = TextStyle(
+                fontSize = 28.sp,
+                fontWeight = FontWeight.ExtraBold,
+                color = Color(0xFF47337A),
+            )
         )
     }
 }
 
 @Composable
-fun ErrorMessage(
-    emailIsValid: Boolean,
-    passwordIsValid: Boolean,
-) {
-    if (emailIsValid && passwordIsValid) return
+fun ErrorMessage() {
     Row {
         Text(
             modifier = Modifier
