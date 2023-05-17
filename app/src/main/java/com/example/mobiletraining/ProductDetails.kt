@@ -50,7 +50,7 @@ import com.example.firsttask.R
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 @Preview
-fun ProductDetails() {
+fun ProductDetails(modifier: Modifier = Modifier) {
     Scaffold(
         topBar = {
             TopAppBar(

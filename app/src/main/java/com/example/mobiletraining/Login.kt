@@ -81,12 +81,14 @@ fun Login(loginHandler: () -> Unit = {}) {
                 setEmailValue = { email.value = it },
                 isValidEmail = emailIsValid.value,
                 resetBorderColor = { emailIsValid.value = true },
+                modifier = Modifier.padding(bottom = 10.dp),
             )
             PasswordTextField(
                 password = password.value,
                 setPassword = { password.value = it },
                 isValidPassword = passwordIsValid.value,
                 resetBorderColor = { passwordIsValid.value = true },
+                modifier = Modifier.padding(bottom = 35.dp),
             )
 
             if (!emailIsValid.value || !passwordIsValid.value) {
@@ -120,10 +122,11 @@ private fun EmailTextField(
     setEmailValue: (String) -> Unit,
     isValidEmail: Boolean,
     resetBorderColor: (Color) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val isFocused = remember { mutableStateOf(false) }
 
-    Row(modifier = Modifier.padding(bottom = 10.dp)) {
+    Row {
         TextField(
             value = email,
             onValueChange = {
@@ -160,6 +163,7 @@ fun PasswordTextField(
     setPassword: (String) -> Unit,
     isValidPassword: Boolean,
     resetBorderColor: (Color) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val isVisible = remember { mutableStateOf(false) }
     val isFocused = remember { mutableStateOf(false) }
@@ -170,7 +174,7 @@ fun PasswordTextField(
             setPassword(it)
         },
         label = { Text("Password", style = TextStyle(color = Color.Black)) },
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 8.dp)
             .border(
