@@ -178,20 +178,14 @@ fun ProductDetails(modifier: Modifier = Modifier) {
                             )
                         )
                         repeat(5) {
-                            Row(
-                                Modifier
-                                    .align(alignment = CenterVertically)
-                                    .height(height = 10.dp)
-                            ) {
-                                Icon(
-                                    Icons.Default.Star,
-                                    contentDescription = null,
-                                    modifier = Modifier
-                                        .size(width = 11.dp, height = 11.dp)
-                                        .align(alignment = Alignment.CenterVertically),
-                                    tint = Color(0xFF67548B),
-                                )
-                            }
+                            Icon(
+                                Icons.Default.Star,
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .size(width = 11.dp, height = 11.dp)
+                                    .align(alignment = Alignment.CenterVertically),
+                                tint = Color(0xFF67548B),
+                            )
                         }
                     }
                     Text(
@@ -202,20 +196,17 @@ fun ProductDetails(modifier: Modifier = Modifier) {
                             color = Color(0XFF4A4A4A)
                         )
                     )
-                    Row(
+                    Text(
                         modifier = Modifier
                             .padding(top = 23.dp)
-                            .padding(bottom = 19.dp)
-                    ) {
-                        Text(
-                            text = "Indulge in a heavenly tea experience with our Stargazer’s Tea Set, featuring a constellation-themed teapot and matching teacups. Crafted from fine porcelain, this elegant set will transport you to the cosmos with every sip.",
-                            style = TextStyle(
-                                color = Color.DarkGray,
-                                fontSize = 16.sp,
-                                textAlign = TextAlign.Left,
-                            )
+                            .padding(bottom = 19.dp),
+                        text = "Indulge in a heavenly tea experience with our Stargazer’s Tea Set, featuring a constellation-themed teapot and matching teacups. Crafted from fine porcelain, this elegant set will transport you to the cosmos with every sip.",
+                        style = TextStyle(
+                            color = Color.DarkGray,
+                            fontSize = 16.sp,
+                            textAlign = TextAlign.Left,
                         )
-                    }
+                    )
                     Text(
                         text = "$90.00",
                         style = TextStyle(

@@ -74,6 +74,7 @@ fun Login(loginHandler: () -> Unit = {}) {
             verticalArrangement = Arrangement.Center,
         ) {
             Image(
+                modifier = Modifier.padding(bottom = 56.dp),
                 painter = painterResource(id = R.drawable.logo),
                 contentDescription = "logo",
             )
@@ -129,34 +130,32 @@ private fun EmailTextField(
 ) {
     val isFocused = remember { mutableStateOf(false) }
 
-    Row {
-        TextField(
-            value = email,
-            onValueChange = {
-                resetBorderColor(Color.Gray)
-                setEmailValue(it)
-            },
-            label = { Text(text = "Email", style = TextStyle(color = Color.Black)) },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 12.dp, end = 8.dp, start = 8.dp)
-                .border(
-                    1.dp,
-                    color = if (!isValidEmail) Color.Red else if (isFocused.value) Color(0xFF722ED8) else Color.Gray,
-                    shape = RoundedCornerShape(6.dp)
-                )
-                .background(color = Color.Transparent)
-                .alpha(0.4f)
-                .onFocusChanged { isFocused.value = it.isFocused },
-            singleLine = true,
-            colors = TextFieldDefaults.textFieldColors(
-                cursorColor = Color.Black,
-                focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent,
-            ),
-            textStyle = TextStyle(color = Color.Black)
-        )
-    }
+    TextField(
+        value = email,
+        onValueChange = {
+            resetBorderColor(Color.Gray)
+            setEmailValue(it)
+        },
+        label = { Text(text = "Email", style = TextStyle(color = Color.Black)) },
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 17.dp, bottom = 12.dp, end = 8.dp, start = 8.dp)
+            .border(
+                1.dp,
+                color = if (!isValidEmail) Color.Red else if (isFocused.value) Color(0xFF722ED8) else Color.Gray,
+                shape = RoundedCornerShape(6.dp)
+            )
+            .background(color = Color.Transparent)
+            .alpha(0.4f)
+            .onFocusChanged { isFocused.value = it.isFocused },
+        singleLine = true,
+        colors = TextFieldDefaults.textFieldColors(
+            cursorColor = Color.Black,
+            focusedIndicatorColor = Color.Transparent,
+            unfocusedIndicatorColor = Color.Transparent,
+        ),
+        textStyle = TextStyle(color = Color.Black)
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -209,21 +208,18 @@ fun PasswordTextField(
 
 @Composable
 fun LoginTitle(modifier: Modifier = Modifier) {
-    Row(
-        modifier
-            .fillMaxWidth()
-    ) {
-        Text(
-            modifier = Modifier
-                .padding(horizontal = 10.dp),
-            text = "Log in",
-            style = TextStyle(
-                fontSize = 28.sp,
-                fontWeight = FontWeight.ExtraBold,
-                color = Color(0xFF47337A),
-            )
+    Text(
+        modifier = Modifier
+            .padding(horizontal = 10.dp)
+            .fillMaxWidth(),
+        text = "Log in",
+        style = TextStyle(
+            fontSize = 28.sp,
+            fontWeight = FontWeight.ExtraBold,
+            color = Color(0xFF47337A),
+            textAlign = TextAlign.Left
         )
-    }
+    )
 }
 
 @Composable
