@@ -1,7 +1,5 @@
 package com.example.mobiletraining
 
-
-import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -25,14 +23,15 @@ import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -41,29 +40,36 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.firsttask.R
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 @Preview
 fun ProductDetails(modifier: Modifier = Modifier) {
     Scaffold(
         topBar = {
-            TopAppBar(
+            CenterAlignedTopAppBar(
+                modifier = Modifier
+                    .padding(start = 6.dp, end = 25.dp)
+                    .fillMaxWidth(),
                 title = {
                     Text(
-                        text = "Item",
-                        modifier = Modifier.fillMaxWidth(),
-                        textAlign = TextAlign.Center
+                        "Item",
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
                     )
                 },
                 navigationIcon = {
                     IconButton(onClick = { /*TODO*/ }, enabled = false) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Back")
+                        Icon(
+                            Icons.Default.ArrowBack,
+                            contentDescription = "Back",
+                            modifier = Modifier.size(width = 20.dp, height = 20.dp)
+                        )
                     }
                 },
                 actions = {
@@ -71,7 +77,7 @@ fun ProductDetails(modifier: Modifier = Modifier) {
                         Icon(
                             imageVector = Icons.Default.ShoppingCart,
                             contentDescription = "Shopping Bag",
-                            modifier = Modifier.size(width = 34.dp, height = 34.dp)
+                            modifier = Modifier.size(width = 24.dp, height = 24.dp)
                         )
                         Box(
                             modifier = Modifier
@@ -89,26 +95,22 @@ fun ProductDetails(modifier: Modifier = Modifier) {
                     }
                 }
             )
-        }
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(top = 25.dp)
-        ) {
-            Image(
-                painter = painterResource(R.drawable.pd_background),
-                modifier = Modifier.fillMaxSize(),
-                contentDescription = "Background Image",
-                contentScale = ContentScale.Crop,
-            )
+        }, content = { paddingValues ->
             Box(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .padding(vertical = 55.dp)
-                    .padding(horizontal = 30.dp)
+                    .padding(top = paddingValues.calculateTopPadding())
             ) {
-                Column {
+                Image(
+                    painter = painterResource(R.drawable.pd_background),
+                    modifier = Modifier.fillMaxSize(),
+                    contentDescription = "Background Image",
+                    contentScale = ContentScale.Crop,
+                )
+                Column(
+                    modifier = Modifier
+                        .padding(horizontal = 30.dp)
+                        .fillMaxSize()
+                ) {
                     Box {
                         Image(
                             painter = painterResource(id = R.drawable.radio),
@@ -135,7 +137,7 @@ fun ProductDetails(modifier: Modifier = Modifier) {
                                 .padding(vertical = 5.dp)
                                 .padding(end = 18.dp)
                                 .padding(start = 13.dp),
-                            verticalAlignment = Alignment.CenterVertically,
+                            verticalAlignment = CenterVertically,
                             horizontalArrangement = Arrangement.Center,
                         ) {
                             Icon(
@@ -155,7 +157,10 @@ fun ProductDetails(modifier: Modifier = Modifier) {
                         }
                     }
                     Row(
-                        modifier = Modifier.padding(top = 10.dp)
+                        modifier = Modifier
+                            .align(alignment = Alignment.CenterHorizontally)
+                            .padding(top = 14.dp)
+                            .padding(bottom = 2.dp)
                     ) {
                         Text(
                             text = "Best DAB Radio",
@@ -169,18 +174,21 @@ fun ProductDetails(modifier: Modifier = Modifier) {
                             text = "5",
                             style = TextStyle(
                                 fontWeight = FontWeight.Bold,
-                                fontSize = 16.sp,
+                                fontSize = 14.sp,
                             )
                         )
                         repeat(5) {
-                            Box(
-                                Modifier.height(height = 22.dp),
-                                contentAlignment = Alignment.Center,
+                            Row(
+                                Modifier
+                                    .align(alignment = CenterVertically)
+                                    .height(height = 10.dp)
                             ) {
                                 Icon(
                                     Icons.Default.Star,
                                     contentDescription = null,
-                                    modifier = Modifier.size(16.dp),
+                                    modifier = Modifier
+                                        .size(width = 11.dp, height = 11.dp)
+                                        .align(alignment = Alignment.CenterVertically),
                                     tint = Color(0xFF67548B),
                                 )
                             }
@@ -189,26 +197,29 @@ fun ProductDetails(modifier: Modifier = Modifier) {
                     Text(
                         text = "Category: Home",
                         style = TextStyle(
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 16.sp,
-                            color = Color.Gray
+                            fontWeight = FontWeight.Normal,
+                            fontSize = 12.sp,
+                            color = Color(0XFF4A4A4A)
                         )
                     )
                     Row(
                         modifier = Modifier
                             .padding(top = 23.dp)
-                            .padding(end = 45.dp)
                             .padding(bottom = 19.dp)
                     ) {
                         Text(
                             text = "Indulge in a heavenly tea experience with our Stargazer’s Tea Set, featuring a constellation-themed teapot and matching teacups. Crafted from fine porcelain, this elegant set will transport you to the cosmos with every sip.",
-                            style = TextStyle(color = Color.DarkGray, fontSize = 16.sp)
+                            style = TextStyle(
+                                color = Color.DarkGray,
+                                fontSize = 16.sp,
+                                textAlign = TextAlign.Left,
+                            )
                         )
                     }
                     Text(
                         text = "$90.00",
                         style = TextStyle(
-                            fontWeight = FontWeight.ExtraBold,
+                            fontWeight = FontWeight.Bold,
                             fontSize = 24.sp,
                         )
                     )
@@ -224,5 +235,5 @@ fun ProductDetails(modifier: Modifier = Modifier) {
                 }
             }
         }
-    }
+    )
 }

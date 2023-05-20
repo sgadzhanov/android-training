@@ -39,6 +39,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -67,7 +68,8 @@ fun Login(loginHandler: () -> Unit = {}) {
         Column(
             modifier = Modifier
                 .padding(6.dp)
-                .padding(top = 60.dp),
+                .padding(horizontal = 8.dp)
+                .padding(top = 68.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
         ) {
@@ -88,7 +90,7 @@ fun Login(loginHandler: () -> Unit = {}) {
                 setPassword = { password.value = it },
                 isValidPassword = passwordIsValid.value,
                 resetBorderColor = { passwordIsValid.value = true },
-                modifier = Modifier.padding(bottom = 35.dp),
+                modifier = Modifier.padding(horizontal = 8.dp),
             )
 
             if (!emailIsValid.value || !passwordIsValid.value) {
@@ -97,6 +99,7 @@ fun Login(loginHandler: () -> Unit = {}) {
 
             Button(
                 modifier = Modifier
+                    .padding(top = 35.dp)
                     .width(333.dp),
                 enabled = emailIsValid.value && passwordIsValid.value,
                 onClick = {
@@ -176,7 +179,6 @@ fun PasswordTextField(
         label = { Text("Password", style = TextStyle(color = Color.Black)) },
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 8.dp)
             .border(
                 1.dp,
                 color = if (!isValidPassword) Color.Red else if (isFocused.value) Color(0xFF722ED8) else Color.Gray,
@@ -226,15 +228,14 @@ fun LoginTitle(modifier: Modifier = Modifier) {
 
 @Composable
 fun ErrorMessage() {
-    Row {
-        Text(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 8.dp, vertical = 4.dp),
-            text = "Please enter valid email and password.",
-            style = TextStyle(color = Color.Red, fontSize = 18.sp)
+    Text(
+        text = "Please enter valid email and password.",
+        style = TextStyle(
+            color = Color.Red,
+            fontSize = 18.sp,
+            textAlign = TextAlign.Start,
         )
-    }
+    )
 }
 
 private fun isValidEmail(email: String): Boolean {
