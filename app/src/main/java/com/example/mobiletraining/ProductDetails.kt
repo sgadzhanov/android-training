@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -30,6 +29,12 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
@@ -44,12 +49,33 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.firsttask.R
+import com.example.mobiletraining.models.ProductModel
+import com.example.mobiletraining.models.viewmodels.ProductViewModel
+import com.example.mobiletraining.utils.UrlImage
+import java.math.BigDecimal
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 @Preview
 fun ProductDetails(modifier: Modifier = Modifier) {
+
+    val viewModel: ProductViewModel = hiltViewModel()
+    val response by viewModel.response.collectAsState()
+    var currentProduct by remember { mutableStateOf<ProductModel?>(null) }
+
+    LaunchedEffect(Unit) {
+        viewModel.getProduct()
+    }
+
+    LaunchedEffect(response) {
+        response?.let {
+            it.onSuccess { res -> currentProduct = res }
+            it.onFailure { /* todo */ }
+        }
+    }
+
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -112,13 +138,9 @@ fun ProductDetails(modifier: Modifier = Modifier) {
                         .fillMaxSize()
                 ) {
                     Box {
-                        Image(
-                            painter = painterResource(id = R.drawable.radio),
-                            contentDescription = "Radio",
-                            contentScale = ContentScale.FillWidth,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clip(RoundedCornerShape(16.dp))
+                        UrlImage(
+                            url = currentProduct?.image,
+                            description = currentProduct?.short_description
                         )
                         Row(
                             modifier = Modifier
@@ -162,30 +184,34 @@ fun ProductDetails(modifier: Modifier = Modifier) {
                             .padding(top = 14.dp)
                             .padding(bottom = 2.dp)
                     ) {
-                        Text(
-                            text = "Best DAB Radio",
-                            style = TextStyle(
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 16.sp,
+                        currentProduct?.title?.let {
+                            Text(
+                                text = it,
+                                style = TextStyle(
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 16.sp,
+                                )
                             )
-                        )
+                        }
                         Spacer(Modifier.weight(1f))
-                        Text(
-                            text = "5",
-                            style = TextStyle(
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 14.sp,
+                        currentProduct?.rating?.let {
+                            Text(
+                                text = it.toString(),
+                                style = TextStyle(
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 14.sp,
+                                )
                             )
-                        )
-                        repeat(5) {
-                            Icon(
-                                Icons.Default.Star,
-                                contentDescription = null,
-                                modifier = Modifier
-                                    .size(width = 11.dp, height = 11.dp)
-                                    .align(alignment = Alignment.CenterVertically),
-                                tint = Color(0xFF67548B),
-                            )
+                            repeat(it) {
+                                Icon(
+                                    Icons.Default.Star,
+                                    contentDescription = null,
+                                    modifier = Modifier
+                                        .size(width = 11.dp, height = 11.dp)
+                                        .align(alignment = Alignment.CenterVertically),
+                                    tint = Color(0xFF67548B),
+                                )
+                            }
                         }
                     }
                     Text(
@@ -196,24 +222,29 @@ fun ProductDetails(modifier: Modifier = Modifier) {
                             color = Color(0XFF4A4A4A)
                         )
                     )
-                    Text(
-                        modifier = Modifier
-                            .padding(top = 23.dp)
-                            .padding(bottom = 19.dp),
-                        text = "Indulge in a heavenly tea experience with our Stargazer’s Tea Set, featuring a constellation-themed teapot and matching teacups. Crafted from fine porcelain, this elegant set will transport you to the cosmos with every sip.",
-                        style = TextStyle(
-                            color = Color.DarkGray,
-                            fontSize = 16.sp,
-                            textAlign = TextAlign.Left,
+                    currentProduct?.description?.let { description ->
+                        Text(
+                            modifier = Modifier
+                                .padding(top = 23.dp)
+                                .padding(bottom = 19.dp),
+                            text = description,
+                            style = TextStyle(
+                                color = Color.DarkGray,
+                                fontSize = 16.sp,
+                                textAlign = TextAlign.Left,
+                            )
                         )
-                    )
-                    Text(
-                        text = "$90.00",
-                        style = TextStyle(
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 24.sp,
+                    }
+                    currentProduct?.price?.let { price ->
+                        val formattedPrice: String = BigDecimal(price).setScale(2).toString()
+                        Text(
+                            text = "$$formattedPrice",
+                            style = TextStyle(
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 24.sp,
+                            )
                         )
-                    )
+                    }
                     Button(
                         onClick = { /*TODO*/ },
                         modifier = Modifier
