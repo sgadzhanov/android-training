@@ -2,8 +2,6 @@ package com.example.mobiletraining.login
 
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,19 +9,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Visibility
-import androidx.compose.material.icons.outlined.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -33,17 +22,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -76,14 +60,11 @@ fun Login(tokenProvider: TokenProvider, loginHandler: () -> Unit = {}) {
             result.onFailure {
                 emailIsValid = false
                 passwordIsValid = false
-                println("@@@@@@@@@@@@@ $it")
                 ToastMessage.showToastMessage(ctx, it.message)
             }
         }
     }
-    Box(
-        modifier = Modifier.fillMaxSize()
-    ) {
+    Box(modifier = Modifier.fillMaxSize()) {
         Image(
             painter = painterResource(R.drawable.login__background),
             modifier = Modifier.fillMaxSize(),
@@ -130,16 +111,13 @@ fun Login(tokenProvider: TokenProvider, loginHandler: () -> Unit = {}) {
                 LoginErrorMessage(modifier = Modifier.padding(start = 10.dp, top = 10.dp))
             }
 
-            Button(
+            LoginButton(
                 modifier = Modifier
                     .padding(top = 35.dp)
                     .width(333.dp),
-                onClick = { loginViewModel.login(UserRequest(email, password)) },
-                colors = ButtonDefaults.buttonColors(Color(0xFF47337A)),
-            ) {
-                if (isLoading) CircularProgressIndicator(color = Color.White, strokeWidth = 4.dp)
-                else Text("Log in", style = TextStyle(fontWeight = FontWeight.Bold))
-            }
+                isLoading = isLoading,
+                clickHandler = { loginViewModel.login(UserRequest(email, password)) }
+            )
         }
     }
 }
@@ -156,4 +134,25 @@ private fun LoginTitle(modifier: Modifier) {
             textAlign = TextAlign.Left
         )
     )
+}
+
+@Composable
+private fun LoginButton(
+    modifier: Modifier,
+    isLoading: Boolean,
+    clickHandler: () -> Unit = {}
+) {
+    val customButtonColors = ButtonDefaults.buttonColors(
+        containerColor = Color(0xFF47337A),
+        disabledContainerColor = Color(0xFF47337A),
+    )
+    Button(
+        modifier = modifier,
+        onClick = { clickHandler() },
+        colors = customButtonColors,
+        enabled = !isLoading,
+    ) {
+        if (isLoading) CircularProgressIndicator(color = Color.White, strokeWidth = 4.dp)
+        else Text("Log in", style = TextStyle(fontWeight = FontWeight.Bold))
+    }
 }

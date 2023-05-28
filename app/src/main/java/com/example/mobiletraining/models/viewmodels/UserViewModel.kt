@@ -26,7 +26,7 @@ class UserViewModel @Inject constructor(val repository: DefaultRepository) : Vie
                 val loginResponse = repository.login(request)
                 userResponse.value = Result.success(loginResponse)
             } catch(e: Exception) {
-                println("!!!!!")
+                println("${e.stackTrace}")
                 userResponse.value = Result.failure(e)
             } finally {
                 isLoadingState.value = false

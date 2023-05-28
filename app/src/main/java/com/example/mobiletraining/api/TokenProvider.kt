@@ -12,9 +12,4 @@ class TokenProvider(
     fun getJwtToken(): String? = this.token
 
     fun getIsLoggedIn(): Boolean = this.isLoggedIn
-
-    fun clearToken() {
-        this.token = null
-        this.isLoggedIn = false
-    }
 }
