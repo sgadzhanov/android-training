@@ -23,21 +23,15 @@ import androidx.compose.ui.unit.dp
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginEmailTextField(
+    modifier: Modifier,
     email: String,
     setEmailValue: (String) -> Unit,
     isValidEmail: Boolean,
     resetBorderColor: (Color) -> Unit,
-    modifier: Modifier,
 ) {
     var isFocused by remember { mutableStateOf(false) }
 
     TextField(
-        value = email,
-        onValueChange = {
-            resetBorderColor(Color.Gray)
-            setEmailValue(it)
-        },
-        label = { Text(text = "Email", style = TextStyle(color = Color.Black)) },
         modifier = modifier
             .fillMaxWidth()
             .border(
@@ -48,6 +42,12 @@ fun LoginEmailTextField(
             .background(color = Color.Transparent)
             .alpha(0.4f)
             .onFocusChanged { isFocused = it.isFocused },
+        value = email,
+        onValueChange = {
+            resetBorderColor(Color.Gray)
+            setEmailValue(it)
+        },
+        label = { Text(text = "Email", style = TextStyle(color = Color.Black)) },
         singleLine = true,
         colors = TextFieldDefaults.textFieldColors(
             cursorColor = Color.Black,

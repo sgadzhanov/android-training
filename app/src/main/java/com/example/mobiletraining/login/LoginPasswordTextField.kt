@@ -32,22 +32,16 @@ import androidx.compose.ui.unit.sp
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginPasswordTextField(
+    modifier: Modifier,
     password: String,
     setPassword: (String) -> Unit,
     isValidPassword: Boolean,
     resetBorderColor: (Color) -> Unit,
-    modifier: Modifier,
 ) {
     var isVisible by remember { mutableStateOf(false) }
     var isFocused by remember { mutableStateOf(false) }
 
     TextField(
-        value = password,
-        onValueChange = {
-            resetBorderColor(Color.Gray)
-            setPassword(it)
-        },
-        label = { Text("Password", style = TextStyle(color = Color.Black)) },
         modifier = modifier
             .fillMaxWidth()
             .border(
@@ -58,6 +52,12 @@ fun LoginPasswordTextField(
             .background(color = Color.Transparent)
             .alpha(0.4f)
             .onFocusChanged { isFocused = it.isFocused },
+        value = password,
+        onValueChange = {
+            resetBorderColor(Color.Gray)
+            setPassword(it)
+        },
+        label = { Text("Password", style = TextStyle(color = Color.Black)) },
         textStyle = TextStyle(fontSize = 16.sp),
         singleLine = true,
         visualTransformation = if (isVisible) VisualTransformation.None else PasswordVisualTransformation(),

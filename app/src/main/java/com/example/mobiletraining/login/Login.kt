@@ -66,8 +66,8 @@ fun Login(tokenProvider: TokenProvider, loginHandler: () -> Unit = {}) {
     }
     Box(modifier = Modifier.fillMaxSize()) {
         Image(
-            painter = painterResource(R.drawable.login__background),
             modifier = Modifier.fillMaxSize(),
+            painter = painterResource(R.drawable.login__background),
             contentDescription = "Background Image",
             contentScale = ContentScale.Crop,
         )
@@ -91,20 +91,20 @@ fun Login(tokenProvider: TokenProvider, loginHandler: () -> Unit = {}) {
             )
 
             LoginEmailTextField(
+                modifier = Modifier
+                    .padding(bottom = 10.dp)
+                    .padding(horizontal = 8.dp),
                 email = email,
                 setEmailValue = { email = it },
                 isValidEmail = emailIsValid,
                 resetBorderColor = { emailIsValid = true },
-                modifier = Modifier
-                    .padding(bottom = 10.dp)
-                    .padding(horizontal = 8.dp),
             )
             LoginPasswordTextField(
+                modifier = Modifier.padding(horizontal = 8.dp),
                 password = password,
                 setPassword = { password = it },
                 isValidPassword = passwordIsValid,
                 resetBorderColor = { passwordIsValid = true },
-                modifier = Modifier.padding(horizontal = 8.dp),
             )
 
             if (!emailIsValid || !passwordIsValid) {

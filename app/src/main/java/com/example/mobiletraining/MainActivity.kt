@@ -35,23 +35,20 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Scaffold {
-                        NavHost(
-                            navController = navController,
-                            startDestination = "Login",
-                            modifier = Modifier.padding(it)
-                        ) {
-                            composable(route = "Login") {
-                                Login(
-                                    tokenProvider,
-                                    loginHandler = {
-                                        navController.navigate("ProductDetails")
-                                    },
-                                )
-                            }
-                            composable(route = "ProductDetails") {
-                                ProductDetails()
-                            }
+                    NavHost(
+                        navController = navController,
+                        startDestination = "Login",
+                    ) {
+                        composable(route = "Login") {
+                            Login(
+                                tokenProvider,
+                                loginHandler = {
+                                    navController.navigate("ProductDetails")
+                                },
+                            )
+                        }
+                        composable(route = "ProductDetails") {
+                            ProductDetails()
                         }
                     }
                 }

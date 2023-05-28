@@ -11,11 +11,11 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun LoginErrorMessage(modifier: Modifier) {
     Text(
+        modifier = modifier.fillMaxWidth(),
         text = "Please enter valid email and password.",
         style = TextStyle(
             color = Color.Red,
             fontSize = 18.sp,
         ),
-        modifier = modifier.fillMaxWidth(),
     )
 }
