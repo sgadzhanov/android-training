@@ -22,10 +22,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -37,6 +38,9 @@ import com.example.mobiletraining.api.TokenProvider
 import com.example.mobiletraining.models.UserRequest
 import com.example.mobiletraining.models.UserResponse
 import com.example.mobiletraining.models.viewmodels.UserViewModel
+import com.example.mobiletraining.ui.theme.DisabledButton
+import com.example.mobiletraining.ui.theme.Violet
+import com.example.mobiletraining.ui.theme.White
 import com.example.mobiletraining.utils.ToastMessage
 
 @Composable
@@ -68,53 +72,61 @@ fun Login(tokenProvider: TokenProvider, loginHandler: () -> Unit = {}) {
         Image(
             modifier = Modifier.fillMaxSize(),
             painter = painterResource(R.drawable.login__background),
-            contentDescription = "Background Image",
+            contentDescription = stringResource(id = R.string.BACKGROUND_IMAGE_DESCRIPTION),
             contentScale = ContentScale.Crop,
         )
         Column(
             modifier = Modifier
-                .padding(6.dp)
-                .padding(horizontal = 8.dp)
-                .padding(top = 68.dp),
+                .padding(dimensionResource(id = R.dimen.PADDING_MEDIUM))
+                .padding(horizontal = dimensionResource(id = R.dimen.PADDING_MEDIUM_PLUS))
+                .padding(top = dimensionResource(id = R.dimen.PADDING_LOGO_TOP)),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
         ) {
             Image(
-                modifier = Modifier.padding(bottom = 56.dp),
+                modifier = Modifier.padding(
+                    bottom = dimensionResource(id = R.dimen.PADDING_LOGO_BOTTOM)
+                ),
                 painter = painterResource(id = R.drawable.logo),
-                contentDescription = "logo",
+                contentDescription = stringResource(id = R.string.LOGO_IMAGE_DESCRIPTION),
             )
             LoginTitle(
                 modifier = Modifier
-                    .padding(top = 40.dp, bottom = 10.dp)
-                    .padding(horizontal = 10.dp)
+                    .padding(
+                        top = dimensionResource(id = R.dimen.PADDING_LOGIN_TITLE_TOP),
+                        bottom = dimensionResource(id = R.dimen.PADDING_LARGE)
+                    )
+                    .padding(horizontal = dimensionResource(id = R.dimen.PADDING_LARGE))
             )
 
             LoginEmailTextField(
                 modifier = Modifier
-                    .padding(bottom = 10.dp)
-                    .padding(horizontal = 8.dp),
+                    .padding(bottom = dimensionResource(id = R.dimen.PADDING_LARGE))
+                    .padding(horizontal = dimensionResource(id = R.dimen.PADDING_MEDIUM_PLUS)),
                 email = email,
                 setEmailValue = { email = it },
                 isValidEmail = emailIsValid,
-                resetBorderColor = { emailIsValid = true },
             )
             LoginPasswordTextField(
-                modifier = Modifier.padding(horizontal = 8.dp),
+                modifier = Modifier.padding(horizontal = dimensionResource(id = R.dimen.PADDING_MEDIUM_PLUS)),
                 password = password,
                 setPassword = { password = it },
                 isValidPassword = passwordIsValid,
-                resetBorderColor = { passwordIsValid = true },
             )
 
             if (!emailIsValid || !passwordIsValid) {
-                LoginErrorMessage(modifier = Modifier.padding(start = 10.dp, top = 10.dp))
+                LoginErrorMessage(
+                    modifier = Modifier.padding(
+                        start = dimensionResource(id = R.dimen.PADDING_LARGE),
+                        top = dimensionResource(id = R.dimen.PADDING_LARGE)
+                    )
+                )
             }
 
             LoginButton(
                 modifier = Modifier
-                    .padding(top = 35.dp)
-                    .width(333.dp),
+                    .padding(top = dimensionResource(id = R.dimen.PADDING_LOGIN_BUTTON_TOP))
+                    .width(dimensionResource(id = R.dimen.LOGIN_BUTTON_WIDTH)),
                 isLoading = isLoading,
                 clickHandler = { loginViewModel.login(UserRequest(email, password)) }
             )
@@ -126,11 +138,11 @@ fun Login(tokenProvider: TokenProvider, loginHandler: () -> Unit = {}) {
 private fun LoginTitle(modifier: Modifier) {
     Text(
         modifier = modifier.fillMaxWidth(),
-        text = "Log in",
+        text = stringResource(id = R.string.LOGIN_TEXT),
         style = TextStyle(
-            fontSize = 28.sp,
+            fontSize = dimensionResource(id = R.dimen.FONT_SIZE_XXL).value.sp,
             fontWeight = FontWeight.ExtraBold,
-            color = Color(0xFF47337A),
+            color = Violet,
             textAlign = TextAlign.Left
         )
     )
@@ -143,8 +155,8 @@ private fun LoginButton(
     clickHandler: () -> Unit = {}
 ) {
     val customButtonColors = ButtonDefaults.buttonColors(
-        containerColor = Color(0xFF47337A),
-        disabledContainerColor = Color(0xFF47337A),
+        containerColor = Violet,
+        disabledContainerColor = DisabledButton,
     )
     Button(
         modifier = modifier,
@@ -152,7 +164,9 @@ private fun LoginButton(
         colors = customButtonColors,
         enabled = !isLoading,
     ) {
-        if (isLoading) CircularProgressIndicator(color = Color.White, strokeWidth = 4.dp)
-        else Text("Log in", style = TextStyle(fontWeight = FontWeight.Bold))
+        Text(
+            text = stringResource(id = R.string.LOGIN_TEXT),
+            style = TextStyle(fontWeight = FontWeight.Bold),
+        )
     }
 }

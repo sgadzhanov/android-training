@@ -6,10 +6,11 @@ import com.example.mobiletraining.models.UserResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Query
 
 interface API {
-    @GET(value = "products/2")
-    suspend fun getProductDetails(): ProductModel
+    @GET(value = "products/8")
+    suspend fun getProductDetails(@Query("populate") value: String): ProductModel
 
     @POST(value = "auth/local")
     suspend fun login(@Body request: UserRequest): UserResponse

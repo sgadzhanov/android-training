@@ -38,10 +38,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -53,6 +55,13 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.firsttask.R
 import com.example.mobiletraining.models.ProductModel
 import com.example.mobiletraining.models.viewmodels.ProductViewModel
+import com.example.mobiletraining.ui.theme.Black
+import com.example.mobiletraining.ui.theme.Black80
+import com.example.mobiletraining.ui.theme.Gray
+import com.example.mobiletraining.ui.theme.Green
+import com.example.mobiletraining.ui.theme.PurpleRatingStar
+import com.example.mobiletraining.ui.theme.Violet
+import com.example.mobiletraining.ui.theme.White
 import com.example.mobiletraining.utils.UrlImage
 import java.math.BigDecimal
 
@@ -80,11 +89,14 @@ fun ProductDetails(modifier: Modifier = Modifier) {
         topBar = {
             CenterAlignedTopAppBar(
                 modifier = Modifier
-                    .padding(start = 6.dp, end = 25.dp)
+                    .padding(
+                        start = dimensionResource(id = R.dimen.PADDING_MEDIUM),
+                        end = dimensionResource(id = R.dimen.PADDING_TOP_APP_BAR_END)
+                    )
                     .fillMaxWidth(),
                 title = {
                     Text(
-                        "Item",
+                        text = stringResource(id = R.string.ITEM_TOPBAR),
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
@@ -93,8 +105,11 @@ fun ProductDetails(modifier: Modifier = Modifier) {
                     IconButton(onClick = { /*TODO*/ }, enabled = false) {
                         Icon(
                             Icons.Default.ArrowBack,
-                            contentDescription = "Back",
-                            modifier = Modifier.size(width = 20.dp, height = 20.dp)
+                            contentDescription = stringResource(id = R.string.BACK_ICON_DESCRIPTION),
+                            modifier = Modifier.size(
+                                width = dimensionResource(id = R.dimen.SIZE_ICON_MEDIUM),
+                                height = dimensionResource(id = R.dimen.SIZE_ICON_MEDIUM)
+                            )
                         )
                     }
                 },
@@ -102,19 +117,22 @@ fun ProductDetails(modifier: Modifier = Modifier) {
                     Box {
                         Icon(
                             imageVector = Icons.Default.ShoppingCart,
-                            contentDescription = "Shopping Bag",
-                            modifier = Modifier.size(width = 24.dp, height = 24.dp)
+                            contentDescription = stringResource(id = R.string.BAG_ICON_DESCRIPTION),
+                            modifier = Modifier.size(
+                                width = dimensionResource(id = R.dimen.SIZE_ICON_LARGE),
+                                height = dimensionResource(id = R.dimen.SIZE_ICON_LARGE),
+                            )
                         )
                         Box(
                             modifier = Modifier
-                                .size(12.dp)
+                                .size(dimensionResource(id = R.dimen.SIZE_MEDIUM))
                                 .background(Color(0xFF67548B), CircleShape)
                                 .align(Alignment.TopEnd)
                         ) {
                             Text(
                                 text = "3",
-                                color = Color.White,
-                                fontSize = 8.sp,
+                                color = White,
+                                fontSize = dimensionResource(id = R.dimen.FONT_SIZE_XS).value.sp,
                                 modifier = Modifier.align(Alignment.Center)
                             )
                         }
@@ -129,12 +147,12 @@ fun ProductDetails(modifier: Modifier = Modifier) {
                 Image(
                     painter = painterResource(R.drawable.pd_background),
                     modifier = Modifier.fillMaxSize(),
-                    contentDescription = "Background Image",
+                    contentDescription = stringResource(id = R.string.BACKGROUND_IMAGE_DESCRIPTION),
                     contentScale = ContentScale.Crop,
                 )
                 Column(
                     modifier = Modifier
-                        .padding(horizontal = 30.dp)
+                        .padding(horizontal = dimensionResource(id = R.dimen.PADDING_PRODUCT_IMAGE_HORIZONTAL))
                         .fillMaxSize()
                 ) {
                     Box {
@@ -145,51 +163,50 @@ fun ProductDetails(modifier: Modifier = Modifier) {
                         Row(
                             modifier = Modifier
                                 .align(Alignment.TopEnd)
-                                .padding(16.dp)
+                                .padding(dimensionResource(id = R.dimen.PADDING_XL))
                                 .background(Color.Transparent)
                                 .border(
-                                    width = 1.dp,
+                                    width = dimensionResource(id = R.dimen.WIDTH_TINY_BORDER),
                                     color = Color.Transparent,
-                                    shape = RoundedCornerShape(24.dp)
+                                    shape = RoundedCornerShape(dimensionResource(id = R.dimen.ROUNDED_CORNER_SHAPE))
                                 )
                                 .background(
-                                    color = Color.White,
-                                    shape = RoundedCornerShape(24.dp)
+                                    color = White,
+                                    shape = RoundedCornerShape(dimensionResource(id = R.dimen.ROUNDED_CORNER_SHAPE))
                                 )
-                                .padding(vertical = 5.dp)
-                                .padding(end = 18.dp)
-                                .padding(start = 13.dp),
+                                .padding(vertical = dimensionResource(id = R.dimen.PADDING_MEDIUM))
+                                .padding(end = dimensionResource(id = R.dimen.PADDING_XXL))
+                                .padding(start = dimensionResource(id = R.dimen.PADDING_LARGE_PLUS)),
                             verticalAlignment = CenterVertically,
                             horizontalArrangement = Arrangement.Center,
                         ) {
                             Icon(
                                 imageVector = Icons.Default.CheckCircle,
                                 contentDescription = null,
-                                tint = Color.Green,
+                                tint = Green,
                                 modifier = Modifier
-                                    .size(14.dp),
-
-                                )
+                                    .size(dimensionResource(id = R.dimen.SIZE_ICON_SMALL)),
+                            )
                             Text(
-                                text = "In stock",
-                                color = Color.Black,
-                                fontSize = 14.sp,
-                                modifier = Modifier.padding(start = 6.dp)
+                                text = stringResource(id = R.string.IN_STOCK_MESSAGE),
+                                color = Black,
+                                fontSize = dimensionResource(id = R.dimen.FONT_SIZE_MEDIUM).value.sp,
+                                modifier = Modifier.padding(start = dimensionResource(id = R.dimen.PADDING_MEDIUM))
                             )
                         }
                     }
                     Row(
                         modifier = Modifier
                             .align(alignment = Alignment.CenterHorizontally)
-                            .padding(top = 14.dp)
-                            .padding(bottom = 2.dp)
+                            .padding(top = dimensionResource(id = R.dimen.PADDING_LARGE_PLUS))
+                            .padding(bottom = dimensionResource(id = R.dimen.PADDING_XS))
                     ) {
                         currentProduct?.title?.let {
                             Text(
                                 text = it,
                                 style = TextStyle(
                                     fontWeight = FontWeight.Bold,
-                                    fontSize = 16.sp,
+                                    fontSize = dimensionResource(id = R.dimen.FONT_SIZE_MEDIUM).value.sp
                                 )
                             )
                         }
@@ -199,7 +216,7 @@ fun ProductDetails(modifier: Modifier = Modifier) {
                                 text = it.toString(),
                                 style = TextStyle(
                                     fontWeight = FontWeight.Bold,
-                                    fontSize = 14.sp,
+                                    fontSize = dimensionResource(id = R.dimen.FONT_SIZE_MEDIUM).value.sp
                                 )
                             )
                             repeat(it) {
@@ -207,30 +224,32 @@ fun ProductDetails(modifier: Modifier = Modifier) {
                                     Icons.Default.Star,
                                     contentDescription = null,
                                     modifier = Modifier
-                                        .size(width = 11.dp, height = 11.dp)
+                                        .size(dimensionResource(id = R.dimen.SIZE_ICON_XS))
                                         .align(alignment = Alignment.CenterVertically),
-                                    tint = Color(0xFF67548B),
+                                    tint = PurpleRatingStar,
                                 )
                             }
                         }
                     }
-                    Text(
-                        text = "Category: Home",
-                        style = TextStyle(
-                            fontWeight = FontWeight.Normal,
-                            fontSize = 12.sp,
-                            color = Color(0XFF4A4A4A)
+                    currentProduct?.category?.let { category ->
+                        Text(
+                            text = stringResource(id = R.string.CATEGORY_MESSAGE) + category,
+                            style = TextStyle(
+                                fontWeight = FontWeight.Normal,
+                                fontSize = dimensionResource(id = R.dimen.FONT_SIZE_SMALL).value.sp,
+                                color = Gray,
+                            )
                         )
-                    )
+                    }
                     currentProduct?.description?.let { description ->
                         Text(
                             modifier = Modifier
-                                .padding(top = 23.dp)
-                                .padding(bottom = 19.dp),
+                                .padding(top = dimensionResource(id = R.dimen.PADDING_TOP_PRODUCT_DESCRIPTION))
+                                .padding(bottom = dimensionResource(id = R.dimen.PADDING_BOTTOM_PRODUCT_DESCRIPTION)),
                             text = description,
                             style = TextStyle(
-                                color = Color.DarkGray,
-                                fontSize = 16.sp,
+                                color = Black80,
+                                fontSize = dimensionResource(id = R.dimen.FONT_SIZE_MEDIUM).value.sp,
                                 textAlign = TextAlign.Left,
                             )
                         )
@@ -241,18 +260,18 @@ fun ProductDetails(modifier: Modifier = Modifier) {
                             text = "$$formattedPrice",
                             style = TextStyle(
                                 fontWeight = FontWeight.Bold,
-                                fontSize = 24.sp,
+                                fontSize = dimensionResource(id = R.dimen.FONT_SIZE_LARGE).value.sp,
                             )
                         )
                     }
                     Button(
                         onClick = { /*TODO*/ },
                         modifier = Modifier
-                            .width(333.dp)
-                            .padding(top = 52.dp),
-                        colors = ButtonDefaults.buttonColors(Color(0xFF47337A))
+                            .width(dimensionResource(id = R.dimen.WIDTH_ADD_BUTTON))
+                            .padding(top = dimensionResource(id = R.dimen.PADDING_TOP_ADD_BUTTON)),
+                        colors = ButtonDefaults.buttonColors(Violet)
                     ) {
-                        Text(text = "+ Add to cart")
+                        Text(text = stringResource(id = R.string.ADD_TO_CART))
                     }
                 }
             }

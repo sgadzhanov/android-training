@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">MobileTraining</string>
+    <string name="LOGIN_TEXT">Log in</string>
+    <string name="PASSWORD">Password</string>
+    <string name="VALIDATION_MESSAGE">Please enter valid email and password</string>
+    <string name="BACKGROUND_IMAGE_DESCRIPTION">Background Image</string>
+    <string name="LOGO_IMAGE_DESCRIPTION">Logo</string>
+    <string name="ITEM_TOPBAR">Item</string>
+    <string name="BACK_ICON_DESCRIPTION">Back</string>
+    <string name="BAG_ICON_DESCRIPTION">Shopping Bag</string>
+    <string name="IN_STOCK_MESSAGE">In stock</string>
+    <string name="CATEGORY_MESSAGE">Category: </string>
+    <string name="ADD_TO_CART">+ Add to cart</string>
+    <string name="EMAIL">Email</string>
 </resources>
