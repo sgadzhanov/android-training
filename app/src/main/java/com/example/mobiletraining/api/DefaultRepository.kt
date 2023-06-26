@@ -8,5 +8,5 @@ import com.example.mobiletraining.models.UserResponse
 
 class DefaultRepository(val apiService: API) : APIHelper {
     override suspend fun login(request: UserRequest): UserResponse = apiService.login(request)
-    override suspend fun getProduct(): ProductModel = apiService.getProductDetails()
+    override suspend fun getProduct(): ProductModel = apiService.getProductDetails("*")
 }

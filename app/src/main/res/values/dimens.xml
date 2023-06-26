@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="PADDING_LOGO_TOP">68dp</dimen>
+    <dimen name="PADDING_LOGO_BOTTOM">56dp</dimen>
+    <dimen name="PADDING_LOGIN_TITLE_TOP">40dp</dimen>
+    <dimen name="PADDING_LOGIN_BUTTON_TOP">35dp</dimen>
+    <dimen name="LOGIN_BUTTON_WIDTH">333dp</dimen>
+    <dimen name="PADDING_TOP_APP_BAR_END">25dp</dimen>
+    <dimen name="SIZE_MEDIUM">12dp</dimen>
+    <dimen name="PADDING_PRODUCT_IMAGE_HORIZONTAL">30dp</dimen>
+    <dimen name="WIDTH_TINY_BORDER">1dp</dimen>
+    <dimen name="ROUNDED_CORNER_SHAPE">24dp</dimen>
+    <dimen name="PADDING_TOP_PRODUCT_DESCRIPTION">13dp</dimen>
+    <dimen name="PADDING_BOTTOM_PRODUCT_DESCRIPTION">23dp</dimen>
+    <dimen name="WIDTH_ADD_BUTTON">333dp</dimen>
+    <dimen name="PADDING_TOP_ADD_BUTTON">52dp</dimen>
+
+    <dimen name="PADDING_XS">2dp</dimen>
+    <dimen name="PADDING_MEDIUM">6dp</dimen>
+    <dimen name="PADDING_MEDIUM_PLUS">8dp</dimen>
+    <dimen name="PADDING_LARGE">10dp</dimen>
+    <dimen name="PADDING_LARGE_PLUS">12dp</dimen>
+    <dimen name="PADDING_XL">16dp</dimen>
+    <dimen name="PADDING_XXL">18dp</dimen>
+
+    <dimen name="FONT_SIZE_XS">8sp</dimen>
+    <dimen name="FONT_SIZE_SMALL">12sp</dimen>
+    <dimen name="FONT_SIZE_LARGE">24sp</dimen>
+    <dimen name="FONT_SIZE_XXL">28sp</dimen>
+    <dimen name="FONT_SIZE_MEDIUM">16sp</dimen>
+
+    <dimen name="SIZE_ICON_XS">10dp</dimen>
+    <dimen name="SIZE_ICON_SMALL">14dp</dimen>
+    <dimen name="SIZE_ICON_MEDIUM">20dp</dimen>
+    <dimen name="SIZE_ICON_LARGE">24dp</dimen>
+</resources>

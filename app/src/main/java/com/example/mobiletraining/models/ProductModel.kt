@@ -9,4 +9,5 @@ data class ProductModel(
     val price: Int,
     val rating: Int,
     val image: String,
+    val category: String,
 )
