@@ -6,5 +6,6 @@ import com.example.mobiletraining.models.UserResponse
 
 interface APIHelper {
     suspend fun login(request: UserRequest): UserResponse
-    suspend fun getProduct(): ProductModel
+    suspend fun getProduct(id: String): ProductModel
+    suspend fun getAllProducts(): List<ProductModel>
 }
