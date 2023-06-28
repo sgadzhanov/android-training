@@ -41,7 +41,7 @@ fun LoginPasswordTextField(
             .fillMaxWidth(),
         value = password,
         onValueChange = {
-            setPassword(it)
+            setPassword("test123")
         },
         label = {
             Text(

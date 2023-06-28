@@ -12,4 +12,9 @@
     <string name="CATEGORY_MESSAGE">Category: </string>
     <string name="ADD_TO_CART">+ Add to cart</string>
     <string name="EMAIL">Email</string>
+    <string name="HOME">Home</string>
+    <string name="SEARCH">Search</string>
+    <string name="CATEGORY_TEMPLATE">Category: </string>
+    <string name="NEW_PRODUCTS">New products</string>
+    <string name="DOLLAR_SIGN">$</string>
 </resources>
