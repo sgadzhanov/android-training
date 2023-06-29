@@ -1,34 +1,44 @@
 package com.example.mobiletraining.models.viewmodels
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.mobiletraining.api.DefaultRepository
+import com.example.mobiletraining.api.TokenProvider
 import com.example.mobiletraining.models.UserRequest
 import com.example.mobiletraining.models.UserResponse
-import com.example.mobiletraining.api.DefaultRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class UserViewModel @Inject constructor(val repository: DefaultRepository) : ViewModel() {
-    private val userResponse = MutableStateFlow<Result<UserResponse>?>(null)
-    val response: StateFlow<Result<UserResponse>?> = userResponse
+class UserViewModel @Inject constructor(
+    private val repository: DefaultRepository,
+    private val tokenProvider: TokenProvider,
+) : ViewModel() {
 
-    private val isLoadingState = MutableStateFlow(false)
-    val isLoading: StateFlow<Boolean> = isLoadingState
+    var isInvalidInfo by mutableStateOf(false)
 
-    fun login(request: UserRequest) {
+    private val tmpUser = mutableStateOf<Result<UserResponse>?>(null)
+    val user: Result<UserResponse>? by tmpUser
+
+    private val tmpIsLoading = mutableStateOf(false)
+    val isLoading: Boolean by tmpIsLoading
+
+    fun login(body: UserRequest) {
         viewModelScope.launch {
             try {
-                isLoadingState.value = true
-                val loginResponse = repository.login(request)
-                userResponse.value = Result.success(loginResponse)
-            } catch(e: Exception) {
-                userResponse.value = Result.failure(e)
+                tmpIsLoading.value = true
+                val userInfo = repository.login(body)
+                tmpUser.value = Result.success(userInfo)
+                tokenProvider.setJwtToken(userInfo.jwt)
+            } catch (e: Exception) {
+                isInvalidInfo = true
+                tmpUser.value = Result.failure(e)
             } finally {
-                isLoadingState.value = false
+                tmpIsLoading.value = false
             }
         }
     }

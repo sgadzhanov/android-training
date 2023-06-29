@@ -19,24 +19,3 @@ class ProductViewModel @Inject constructor(val repository: DefaultRepository) : 
         product.value = repository.getProduct(id)
     }
 }
-//class ProductViewModel @Inject constructor(val repository: DefaultRepository) : ViewModel() {
-//    private val productResponse = MutableStateFlow<Result<ProductModel>?>(null)
-//    val response: StateFlow<Result<ProductModel>?> = productResponse
-//
-//    private val loadingState = MutableStateFlow(false)
-//    val isLoading: StateFlow<Boolean> = loadingState
-//
-//    fun getProduct() {
-//        viewModelScope.launch {
-//            try {
-//                loadingState.value = true
-//                val res = repository.getProduct()
-//                productResponse.value = Result.success(res)
-//            } catch (e: Exception) {
-//                productResponse.value = Result.failure(e)
-//            } finally {
-//                loadingState.value = false
-//            }
-//        }
-//    }
-//}

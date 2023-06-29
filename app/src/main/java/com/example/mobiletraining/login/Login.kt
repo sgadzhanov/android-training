@@ -11,11 +11,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -23,51 +21,52 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.firsttask.R
-import com.example.mobiletraining.api.TokenProvider
+import com.example.mobiletraining.destinations.HomeDestination
 import com.example.mobiletraining.models.UserRequest
-import com.example.mobiletraining.models.UserResponse
 import com.example.mobiletraining.models.viewmodels.UserViewModel
 import com.example.mobiletraining.ui.theme.DisabledButton
 import com.example.mobiletraining.ui.theme.Violet
-import com.example.mobiletraining.ui.theme.White
-import com.example.mobiletraining.utils.ToastMessage
+import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.annotation.NavGraph
+import com.ramcosta.composedestinations.annotation.RootNavGraph
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
+@RootNavGraph
+@NavGraph
+annotation class LoginNavGraph(
+    val start: Boolean = false
+)
+
+@LoginNavGraph(start = true)
+@Destination
 @Composable
-fun Login(tokenProvider: TokenProvider, loginHandler: () -> Unit = {}) {
-    val ctx = LocalContext.current
-    val loginViewModel: UserViewModel = hiltViewModel()
-    val response by loginViewModel.response.collectAsState()
-    val isLoading by loginViewModel.isLoading.collectAsState()
+fun LoginScreen(destinationsNavigator: DestinationsNavigator) {
+    val userViewModel: UserViewModel = hiltViewModel()
 
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    var emailIsValid by remember { mutableStateOf(true) }
-    var passwordIsValid by remember { mutableStateOf(true) }
+    val emailIsValid by remember { mutableStateOf(true) }
+    val passwordIsValid by remember { mutableStateOf(true) }
 
-    LaunchedEffect(response) {
-        response?.let { result ->
-            result.onSuccess { response: UserResponse ->
-                tokenProvider.setJwtToken(response.jwt)
-                loginHandler()
-            }
-            result.onFailure {
-                emailIsValid = false
-                passwordIsValid = false
-                ToastMessage.showToastMessage(ctx, it.message)
+    LaunchedEffect(userViewModel.user) {
+        userViewModel.user.let { res ->
+            res?.onSuccess {
+                destinationsNavigator.navigate(
+                    HomeDestination
+                )
             }
         }
     }
+
     Box(modifier = Modifier.fillMaxSize()) {
         Image(
             modifier = Modifier.fillMaxSize(),
@@ -85,7 +84,7 @@ fun Login(tokenProvider: TokenProvider, loginHandler: () -> Unit = {}) {
         ) {
             Image(
                 modifier = Modifier.padding(
-                    bottom = dimensionResource(id = R.dimen.PADDING_LOGO_BOTTOM)
+//                    bottom = dimensionResource(id = R.dimen.PADDING_LOGO_BOTTOM)
                 ),
                 painter = painterResource(id = R.drawable.logo),
                 contentDescription = stringResource(id = R.string.LOGO_IMAGE_DESCRIPTION),
@@ -127,8 +126,8 @@ fun Login(tokenProvider: TokenProvider, loginHandler: () -> Unit = {}) {
                 modifier = Modifier
                     .padding(top = dimensionResource(id = R.dimen.PADDING_LOGIN_BUTTON_TOP))
                     .width(dimensionResource(id = R.dimen.LOGIN_BUTTON_WIDTH)),
-                isLoading = isLoading,
-                clickHandler = { loginViewModel.login(UserRequest(email, password)) }
+                isLoading = userViewModel.isLoading,
+                clickHandler = { userViewModel.login(UserRequest(email, password)) }
             )
         }
     }

@@ -17,4 +17,9 @@
     <string name="CATEGORY_TEMPLATE">Category: </string>
     <string name="NEW_PRODUCTS">New products</string>
     <string name="DOLLAR_SIGN">$</string>
+    <string name="FILTERS">Filters</string>
+    <string name="SAVE">Save</string>
+    <string name="CATEGORY">Category</string>
+    <string name="PRICE_RANGE">Price range</string>
+    <string name="PRODUCT_RATING">Product rating</string>
 </resources>

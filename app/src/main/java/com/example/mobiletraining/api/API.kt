@@ -1,5 +1,6 @@
 package com.example.mobiletraining.api
 
+import com.example.mobiletraining.models.CategoryModel
 import com.example.mobiletraining.models.ProductModel
 import com.example.mobiletraining.models.UserRequest
 import com.example.mobiletraining.models.UserResponse
@@ -21,4 +22,7 @@ interface API {
 
     @GET(value = "products")
     suspend fun getAllProducts(@Query("populate") value: String): List<ProductModel>
+
+    @GET(value = "categories")
+    suspend fun getCategories(): List<CategoryModel>
 }
