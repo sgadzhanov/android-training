@@ -27,7 +27,6 @@ class ProductsViewModel @Inject constructor(private val repository: DefaultRepos
     ViewModel() {
     init {
         viewModelScope.launch(Dispatchers.IO) {
-            delay(200)
             getAllProducts()
             getAllCategories()
         }
