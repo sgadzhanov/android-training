@@ -45,6 +45,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.firsttask.R
+import com.example.mobiletraining.destinations.HomeDestination
 import com.example.mobiletraining.models.ProductModel
 import com.example.mobiletraining.models.viewmodels.ProductViewModel
 import com.example.mobiletraining.ui.theme.Black
@@ -55,13 +56,17 @@ import com.example.mobiletraining.ui.theme.Violet
 import com.example.mobiletraining.ui.theme.White
 import com.example.mobiletraining.utils.RatingStars
 import com.example.mobiletraining.utils.UrlImage
+import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
+import java.text.DecimalFormat
 
+@Destination
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProductDetails(id: String) {
+fun ProductDetails(id: String, destinationsNavigator: DestinationsNavigator) {
     val viewModel: ProductViewModel = hiltViewModel()
     val coroutineScope = rememberCoroutineScope()
 
@@ -88,7 +93,7 @@ fun ProductDetails(id: String) {
                     )
                 },
                 navigationIcon = {
-                    IconButton(onClick = { /*TODO*/ }, enabled = false) {
+                    IconButton(onClick = { destinationsNavigator.navigate(HomeDestination) }) {
                         Icon(
                             Icons.Default.ArrowBack,
                             contentDescription = stringResource(id = R.string.BACK_ICON_DESCRIPTION),
@@ -218,7 +223,7 @@ fun ProductDetails(id: String) {
                                 textAlign = TextAlign.Left,
                             )
                         )
-                        val formattedPrice: String = BigDecimal(product.price).setScale(2).toString()
+                        val formattedPrice = DecimalFormat("0.00").format(product.price)
                         Text(
                             text = "${stringResource(id = R.string.DOLLAR_SIGN)}$formattedPrice",
                             style = TextStyle(

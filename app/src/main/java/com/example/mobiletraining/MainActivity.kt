@@ -7,14 +7,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavType
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import com.example.mobiletraining.api.TokenProvider
-import com.example.mobiletraining.login.Login
 import com.example.mobiletraining.ui.theme.MobileTrainingTheme
+import com.ramcosta.composedestinations.DestinationsNavHost
+import com.ramcosta.composedestinations.navigation.dependency
+import com.ramcosta.composedestinations.rememberNavHostEngine
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -27,38 +25,23 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             MobileTrainingTheme {
-                val navController = rememberNavController()
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    NavHost(
+                    val navController = rememberNavController()
+                    val navigateUp = navController::navigateUp
+
+                    val navHostEngine = rememberNavHostEngine()
+                    DestinationsNavHost(
+                        startRoute = NavGraphs.login,
+                        engine = navHostEngine,
                         navController = navController,
-                        startDestination = "Login",
-                    ) {
-                        composable(route = "Login") {
-                            Login(
-                                tokenProvider,
-                                loginHandler = {
-                                    navController.navigate("Home")
-                                },
-                            )
-                        }
-                        composable(
-                            route = "ProductDetails/{id}",
-                            arguments = listOf(navArgument("id") {
-                                type = NavType.StringType
-                            })
-                        ) { navBackStackEntry ->
-                            val id = navBackStackEntry.arguments?.getString("id")
-                            if (id != null) {
-                                ProductDetails(id)
-                            }
-                        }
-                        composable(route = "Home") {
-                            HomeScreen(goToProductDetails = {id -> navController.navigate("ProductDetails/$id")})
-                        }
-                    }
+                        dependenciesContainerBuilder = {
+                            dependency(navigateUp)
+                        },
+                        navGraph = NavGraphs.root
+                    )
                 }
             }
         }

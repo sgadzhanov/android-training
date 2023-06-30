@@ -21,13 +21,13 @@ import com.example.mobiletraining.ui.theme.PurpleRatingStar
 fun RatingStars(rating: Int) {
     Row(
         horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
             text = rating.toString(),
             style = TextStyle(
                 fontWeight = FontWeight.Bold,
-                fontSize = dimensionResource(id = R.dimen.FONT_SIZE_MEDIUM).value.sp
+                fontSize = dimensionResource(id = R.dimen.FONT_SIZE_SMALL_PLUS).value.sp,
             )
         )
         repeat(rating) {

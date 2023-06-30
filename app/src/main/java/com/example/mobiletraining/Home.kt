@@ -2,19 +2,23 @@ package com.example.mobiletraining
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FilterList
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.AccountCircle
+import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
@@ -22,12 +26,15 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.RangeSlider
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -37,7 +44,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Color.Companion.Gray
 import androidx.compose.ui.graphics.Color.Companion.Transparent
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.dimensionResource
@@ -45,29 +51,51 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.example.firsttask.R
+import com.example.mobiletraining.destinations.ProductDetailsDestination
 import com.example.mobiletraining.models.viewmodels.ProductsViewModel
+import com.example.mobiletraining.ui.theme.Black
+import com.example.mobiletraining.ui.theme.Black80
+import com.example.mobiletraining.ui.theme.BrightPurple
+import com.example.mobiletraining.ui.theme.DividerGray
+import com.example.mobiletraining.ui.theme.PurpleRatingStar
 import com.example.mobiletraining.ui.theme.Violet
 import com.example.mobiletraining.utils.RatingStars
-import kotlinx.coroutines.Dispatchers
+import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.annotation.RootNavGraph
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.launch
+import java.text.DecimalFormat
+import kotlin.math.roundToInt
 
 @OptIn(ExperimentalMaterial3Api::class)
+@RootNavGraph(start = true)
+@Destination
 @Composable
-fun HomeScreen(goToProductDetails: (id: String) -> Unit = {}) {
+fun Home(destinationsNavigator: DestinationsNavigator) {
     val productsViewModel: ProductsViewModel = hiltViewModel()
-    val coroutineScore = rememberCoroutineScope()
-    var filterValue by remember { mutableStateOf("") }
-    var isLoading by remember { mutableStateOf(true) }
+    val coroutineScope = rememberCoroutineScope()
+    val sheetState = rememberModalBottomSheetState()
+    var ratingFilter by remember { mutableStateOf(1) }
+    var priceRange by remember { mutableStateOf(0f..200f) }
+    var selectedCategories by remember { mutableStateOf(mutableListOf<String>()) }
+    val isLoading = productsViewModel.isLoading
+    //TODO change some of the names
 
-    LaunchedEffect(Unit) {
-        coroutineScore.launch(Dispatchers.IO) {
-            productsViewModel.filterProducts(filterValue)
-            isLoading = false
-        }
+    productsViewModel.allCategories.let { categories ->
+        selectedCategories = categories.map { category -> category.name } as MutableList<String>
+    }
+
+    fun selectCategory(category: String) {
+        selectedCategories = selectedCategories.toMutableList().apply { add(category) }
+    }
+
+    fun deselectCategory(category: String) {
+        selectedCategories = selectedCategories.toMutableList().apply { remove(category) }
     }
 
     Scaffold(
@@ -108,7 +136,7 @@ fun HomeScreen(goToProductDetails: (id: String) -> Unit = {}) {
                     CircularProgressIndicator(
                         modifier = Modifier
                             .align(Alignment.Center)
-                            .size(dimensionResource(id = R.dimen.SIZE_MEDIUM)),
+                            .size(dimensionResource(id = R.dimen.SIZE_XXXL)),
                         color = Violet,
                     )
                 } else {
@@ -121,40 +149,49 @@ fun HomeScreen(goToProductDetails: (id: String) -> Unit = {}) {
                             .fillMaxSize()
                     ) {
                         SearchBar(productsViewModel = productsViewModel)
-                        Row(
-                            modifier = Modifier.padding(
-                                top = dimensionResource(id = R.dimen.PADDING_XXL),
-                                bottom = dimensionResource(id = R.dimen.PADDING_MEDIUM),
-                            ),
-                            verticalAlignment = Alignment.CenterVertically,
-                        ) {
+                        Row(modifier = Modifier.padding(top = dimensionResource(id = R.dimen.PADDING_XXXL))) {
                             Text(
                                 text = stringResource(id = R.string.NEW_PRODUCTS),
-                                fontSize = dimensionResource(id = R.dimen.FONT_SIZE_MEDIUM_PLUS).value.sp,
-                                modifier = Modifier.weight(1f),
+                                style = MaterialTheme.typography.bodyMedium,
+                                fontSize = dimensionResource(id = R.dimen.FONT_SIZE_LARGE).value.sp,
                             )
+                            Spacer(modifier = Modifier.weight(1f))
                             Icon(
                                 imageVector = Icons.Default.FilterList,
                                 contentDescription = null,
-                                modifier = Modifier.size(dimensionResource(id = R.dimen.SIZE_XXL)),
+                                modifier = Modifier
+                                    .size(
+                                        height = dimensionResource(id = R.dimen.SIZE_ICON_LARGE),
+                                        width = dimensionResource(id = R.dimen.SIZE_ICON_XL),
+                                    )
+                                    .clickable {
+                                        coroutineScope.launch {
+                                            sheetState.show()
+                                        }
+                                    }
                             )
                         }
                         productsViewModel.filteredProducts.let { products ->
                             LazyColumn(
-                                modifier = Modifier
-                                    .fillMaxWidth()
+                                modifier = Modifier.fillMaxWidth()
                             ) {
-
                                 items(products.size) { index ->
                                     val currentProduct = products[index]
 
-                                    Box(modifier = Modifier
-                                        .padding(
-                                            top = dimensionResource(id = R.dimen.PADDING_LARGE_PLUS),
-                                            bottom = dimensionResource(id = R.dimen.PADDING_XL),
-                                        )
-                                        .clickable { goToProductDetails(currentProduct.id.toString()) })
-                                    {
+                                    Box(
+                                        modifier = Modifier
+                                            .padding(
+                                                top = dimensionResource(id = R.dimen.PADDING_LARGE_PLUS),
+                                                bottom = dimensionResource(id = R.dimen.PADDING_XL),
+                                            )
+                                            .clickable {
+                                                destinationsNavigator.navigate(
+                                                    ProductDetailsDestination(
+                                                        currentProduct.id.toString()
+                                                    )
+                                                )
+                                            }
+                                    ) {
                                         Row(
                                             modifier = Modifier
                                                 .padding(top = dimensionResource(id = R.dimen.PADDING_LARGE))
@@ -185,26 +222,30 @@ fun HomeScreen(goToProductDetails: (id: String) -> Unit = {}) {
                                                     text = currentProduct.title,
                                                     style = MaterialTheme.typography.titleSmall.copy(
                                                         fontWeight = FontWeight.Bold,
-                                                        fontSize = dimensionResource(id = R.dimen.FONT_SIZE_SMALL).value.sp,
+                                                        fontSize = dimensionResource(id = R.dimen.FONT_SIZE_MEDIUM).value.sp,
+                                                        color = Black80,
                                                     )
                                                 )
                                                 Text(
                                                     modifier = Modifier.padding(
-                                                        top = dimensionResource(id = R.dimen.PADDING_SMALL)
+                                                        top = dimensionResource(id = R.dimen.PADDING_MEDIUM)
                                                     ),
                                                     text = currentProduct.short_description,
                                                     style = MaterialTheme.typography.bodySmall.copy(
                                                         fontWeight = FontWeight.Medium,
                                                         color = Color.DarkGray,
-                                                        fontSize = dimensionResource(id = R.dimen.FONT_SIZE_SMALL).value.sp,
+                                                        fontSize = dimensionResource(id = R.dimen.FONT_SIZE_SMALL_PLUS).value.sp,
                                                     )
                                                 )
                                                 RatingStars(rating = currentProduct.rating)
+
+                                                val formattedPrice =
+                                                    DecimalFormat("0.00").format(currentProduct.price)
                                                 Text(
                                                     modifier = Modifier.padding(
                                                         top = dimensionResource(id = R.dimen.PADDING_SMALL)
                                                     ),
-                                                    text = "${stringResource(id = R.string.DOLLAR_SIGN)}${currentProduct.price}",
+                                                    text = "${stringResource(id = R.string.DOLLAR_SIGN)}${formattedPrice}",
                                                     style = MaterialTheme.typography.titleSmall,
                                                     fontSize = dimensionResource(id = R.dimen.FONT_SIZE_MEDIUM).value.sp,
                                                 )
@@ -212,9 +253,161 @@ fun HomeScreen(goToProductDetails: (id: String) -> Unit = {}) {
                                         }
                                     }
                                     Divider(
-                                        color = Gray,
+                                        color = DividerGray,
                                         thickness = dimensionResource(id = R.dimen.DIVIDER),
                                     )
+                                }
+                            }
+                        }
+                        if (sheetState.isVisible) {
+                            ModalBottomSheet(
+                                onDismissRequest = {
+                                    coroutineScope.launch {
+                                        sheetState.hide()
+                                    }
+                                },
+                                modifier = Modifier.fillMaxSize(),
+                                sheetState = sheetState
+                            ) {
+                                Column(
+                                    modifier = Modifier.padding(
+                                        start = dimensionResource(id = R.dimen.PADDING_XXXL),
+                                        end = dimensionResource(id = R.dimen.PADDING_XXXL),
+                                    )
+                                ) {
+                                    Row {
+                                        Icon(Icons.Outlined.Close, contentDescription = null,
+                                            modifier = Modifier.clickable {
+                                                productsViewModel.removeAllFilters()
+                                                coroutineScope.launch {
+                                                    sheetState.hide()
+                                                }
+                                            })
+                                        Text(
+                                            modifier = Modifier.padding(
+                                                start = dimensionResource(
+                                                    id = R.dimen.PADDING_XL,
+                                                )
+                                            ),
+                                            text = stringResource(id = R.string.FILTERS),
+                                            style = MaterialTheme.typography.titleSmall.copy(
+                                                color = Black,
+                                                fontSize = dimensionResource(id = R.dimen.FONT_SIZE_MEDIUM).value.sp,
+                                            )
+                                        )
+                                        Spacer(modifier = Modifier.weight(1f))
+                                        Text(
+                                            text = stringResource(id = R.string.SAVE),
+                                            style = MaterialTheme.typography.titleSmall.copy(
+                                                color = BrightPurple,
+                                                fontSize = dimensionResource(id = R.dimen.FONT_SIZE_MEDIUM).value.sp,
+                                            ),
+                                            modifier = Modifier.clickable {
+                                                productsViewModel.applyFilters(
+                                                    selectedCategories,
+                                                    ratingFilter,
+                                                    priceRange,
+                                                )
+                                                coroutineScope.launch {
+                                                    sheetState.hide()
+                                                }
+                                            }
+                                        )
+                                    }
+                                    CategoriesFilter(
+                                        productsViewModel = productsViewModel,
+                                        selectedCategories = selectedCategories,
+                                        ::selectCategory,
+                                        ::deselectCategory,
+                                    )
+                                    Text(
+                                        text = stringResource(id = R.string.PRICE_RANGE),
+                                        modifier = Modifier.padding(
+                                            top = dimensionResource(
+                                                id = R.dimen.PADDING_XXXL,
+                                            )
+                                        ),
+                                        color = Black,
+                                        fontSize = dimensionResource(id = R.dimen.FONT_SIZE_MEDIUM).value.sp,
+                                    )
+                                    RangeSlider(
+                                        value = priceRange,
+                                        onValueChange = { value ->
+                                            priceRange = value.start.roundToInt()
+                                                .toFloat()..value.endInclusive.roundToInt()
+                                                .toFloat()
+                                        },
+                                        valueRange = 0f..150f,
+                                        modifier = Modifier.padding(
+                                            top = dimensionResource(
+                                                id = R.dimen.PADDING_LARGE,
+                                            )
+                                        ),
+                                        colors = SliderDefaults.colors(
+                                            thumbColor = PurpleRatingStar,
+                                            activeTrackColor = PurpleRatingStar,
+                                            inactiveTrackColor = PurpleRatingStar,
+                                            activeTickColor = PurpleRatingStar,
+                                            inactiveTickColor = PurpleRatingStar,
+                                            disabledThumbColor = PurpleRatingStar,
+                                            disabledActiveTrackColor = PurpleRatingStar,
+                                            disabledActiveTickColor = PurpleRatingStar,
+                                            disabledInactiveTrackColor = PurpleRatingStar,
+                                            disabledInactiveTickColor = PurpleRatingStar
+                                        )
+                                    )
+                                    Row(
+                                        modifier = Modifier
+                                            .padding(
+                                                top = dimensionResource(id = R.dimen.PADDING_MEDIUM_PLUS),
+                                            )
+                                            .fillMaxWidth(),
+                                        horizontalArrangement = Arrangement.SpaceBetween,
+                                    ) {
+                                        Text(
+                                            text = "${stringResource(id = R.string.DOLLAR_SIGN)}${priceRange.start.toInt()}",
+                                            style = MaterialTheme.typography.titleSmall,
+                                        )
+                                        Text(
+                                            text = "${stringResource(id = R.string.DOLLAR_SIGN)}${priceRange.endInclusive.toInt()}",
+                                            style = MaterialTheme.typography.titleSmall,
+                                        )
+                                    }
+                                    Text(
+                                        text = stringResource(id = R.string.PRODUCT_RATING),
+                                        modifier = Modifier.padding(
+                                            top = dimensionResource(
+                                                id = R.dimen.PADDING_LARGE,
+                                            )
+                                        ),
+                                        style = MaterialTheme.typography.titleMedium,
+                                    )
+                                    LazyRow(
+                                        modifier = Modifier
+                                            .padding(
+                                                top = dimensionResource(
+                                                    id = R.dimen.PADDING_XS,
+                                                )
+                                            )
+                                            .fillMaxWidth(),
+                                        horizontalArrangement = Arrangement.SpaceBetween,
+                                    ) {
+                                        items(5) { index ->
+                                            val currentStar = index + 1
+
+                                            Icon(
+                                                painter = painterResource(
+                                                    id = if (currentStar > ratingFilter) R.drawable.star
+                                                    else R.drawable.empty_star
+                                                ),
+                                                contentDescription = null,
+                                                modifier = Modifier
+                                                    .size(dimensionResource(id = R.dimen.SIZE_ICON_LARGE))
+                                                    .clickable { ratingFilter = currentStar },
+                                                tint = PurpleRatingStar,
+                                            )
+                                        }
+                                    }
                                 }
                             }
                         }
