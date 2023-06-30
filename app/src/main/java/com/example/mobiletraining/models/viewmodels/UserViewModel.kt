@@ -21,22 +21,26 @@ class UserViewModel @Inject constructor(
 
     var isInvalidInfo by mutableStateOf(false)
 
-    private val tmpUser = mutableStateOf<Result<UserResponse>?>(null)
-    val user: Result<UserResponse>? by tmpUser
+    private val tmpUser = mutableStateOf<UserResponse?>(null)
+    val user: UserResponse? by tmpUser
 
     private val tmpIsLoading = mutableStateOf(false)
     val isLoading: Boolean by tmpIsLoading
 
-    fun login(body: UserRequest) {
+    fun login(identifier: String, password: String) {
+        val req = UserRequest(identifier, password)
+        login(req)
+    }
+
+    private fun login(body: UserRequest) {
         viewModelScope.launch {
             try {
                 tmpIsLoading.value = true
                 val userInfo = repository.login(body)
-                tmpUser.value = Result.success(userInfo)
+                tmpUser.value = userInfo
                 tokenProvider.setJwtToken(userInfo.jwt)
             } catch (e: Exception) {
                 isInvalidInfo = true
-                tmpUser.value = Result.failure(e)
             } finally {
                 tmpIsLoading.value = false
             }

@@ -1,48 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="PADDING_LOGO_TOP">68dp</dimen>
-    <dimen name="PADDING_LOGO_BOTTOM">56dp</dimen>
-    <dimen name="PADDING_LOGIN_TITLE_TOP">40dp</dimen>
-    <dimen name="PADDING_LOGIN_BUTTON_TOP">35dp</dimen>
-    <dimen name="LOGIN_BUTTON_WIDTH">333dp</dimen>
-    <dimen name="PADDING_TOP_APP_BAR_END">25dp</dimen>
-    <dimen name="SIZE_MEDIUM">12dp</dimen>
-    <dimen name="SIZE_XL">20dp</dimen>
-    <dimen name="SIZE_XXL">24dp</dimen>
-    <dimen name="SIZE_XXXL">30dp</dimen>
-    <dimen name="PADDING_PRODUCT_IMAGE_HORIZONTAL">30dp</dimen>
-    <dimen name="WIDTH_TINY_BORDER">1dp</dimen>
-    <dimen name="ROUNDED_CORNER_SHAPE">24dp</dimen>
-    <dimen name="PADDING_TOP_PRODUCT_DESCRIPTION">13dp</dimen>
-    <dimen name="PADDING_BOTTOM_PRODUCT_DESCRIPTION">23dp</dimen>
-    <dimen name="WIDTH_ADD_BUTTON">333dp</dimen>
-    <dimen name="PADDING_TOP_ADD_BUTTON">52dp</dimen>
-    <dimen name="SEARCH_FIELD_SHAPE">28dp</dimen>
-    <dimen name="PRODUCT_HOME_PAGE_IMAGE_SIZE">130dp</dimen>
+    <dimen name="padding_logo_top">68dp</dimen>
+    <dimen name="padding_logo_bottom">56dp</dimen>
+    <dimen name="padding_login_title_top">40dp</dimen>
+    <dimen name="padding_login_button_top">35dp</dimen>
+    <dimen name="login_button_width">333dp</dimen>
+    <dimen name="padding_top_app_bar_end">25dp</dimen>
+    <dimen name="size_medium">12dp</dimen>
+    <dimen name="size_large">15dp</dimen>
+    <dimen name="size_xl">20dp</dimen>
+    <dimen name="size_xxl">24dp</dimen>
+    <dimen name="size_xxxl">30dp</dimen>
+    <dimen name="padding_product_image_horizontal">30dp</dimen>
+    <dimen name="width_tiny_border">1dp</dimen>
+    <dimen name="rounded_corner_shape">24dp</dimen>
+    <dimen name="padding_top_product_description">13dp</dimen>
+    <dimen name="padding_bottom_product_description">23dp</dimen>
+    <dimen name="width_add_button">333dp</dimen>
+    <dimen name="padding_top_add_button">52dp</dimen>
+    <dimen name="search_filed_shape">28dp</dimen>
+    <dimen name="product_home_page_image_size">130dp</dimen>
+    <dimen name="empty_cart_bottom_padding">170dp</dimen>
+    <dimen name="padding_cart_button">80dp</dimen>
 
-    <dimen name="PADDING_XS">2dp</dimen>
-    <dimen name="PADDING_SMALL">4dp</dimen>
-    <dimen name="PADDING_MEDIUM">6dp</dimen>
-    <dimen name="PADDING_MEDIUM_PLUS">8dp</dimen>
-    <dimen name="PADDING_LARGE">10dp</dimen>
-    <dimen name="PADDING_LARGE_PLUS">12dp</dimen>
-    <dimen name="PADDING_XL">16dp</dimen>
-    <dimen name="PADDING_XXL">18dp</dimen>
-    <dimen name="PADDING_XXXL">22dp</dimen>
+    <dimen name="padding_xs">2dp</dimen>
+    <dimen name="padding_small">4dp</dimen>
+    <dimen name="padding_medium">6dp</dimen>
+    <dimen name="padding_medium_plus">8dp</dimen>
+    <dimen name="padding_large">10dp</dimen>
+    <dimen name="padding_large_plus">12dp</dimen>
+    <dimen name="padding_xl">16dp</dimen>
+    <dimen name="padding_xxl">18dp</dimen>
+    <dimen name="padding_xxxl">22dp</dimen>
 
-    <dimen name="DIVIDER">1dp</dimen>
+    <dimen name="cart_image_size">60dp</dimen>
 
-    <dimen name="FONT_SIZE_XS">8sp</dimen>
-    <dimen name="FONT_SIZE_SMALL">12sp</dimen>
-    <dimen name="FONT_SIZE_SMALL_PLUS">14sp</dimen>
-    <dimen name="FONT_SIZE_MEDIUM">16sp</dimen>
-    <dimen name="FONT_SIZE_MEDIUM_PLUS">20sp</dimen>
-    <dimen name="FONT_SIZE_LARGE">24sp</dimen>
-    <dimen name="FONT_SIZE_XXL">28sp</dimen>
+    <dimen name="divider">1dp</dimen>
 
-    <dimen name="SIZE_ICON_XS">12dp</dimen>
-    <dimen name="SIZE_ICON_SMALL">14dp</dimen>
-    <dimen name="SIZE_ICON_MEDIUM">20dp</dimen>
-    <dimen name="SIZE_ICON_LARGE">24dp</dimen>
-    <dimen name="SIZE_ICON_XL">27dp</dimen>
+    <dimen name="font_size_xxs">6sp</dimen>
+    <dimen name="font_size_xs">8sp</dimen>
+    <dimen name="font_size_small">12sp</dimen>
+    <dimen name="font_size_small_plus">14sp</dimen>
+    <dimen name="font_size_medium">16sp</dimen>
+    <dimen name="font_size_medium_plus">18sp</dimen>
+    <dimen name="font_size_large">20sp</dimen>
+    <dimen name="font_size_xl">24sp</dimen>
+    <dimen name="font_size_xxl">28sp</dimen>
+
+    <dimen name="size_icon_xs">12dp</dimen>
+    <dimen name="size_icon_small">14dp</dimen>
+    <dimen name="size_icon_medium">20dp</dimen>
+    <dimen name="size_icon_large">24dp</dimen>
+    <dimen name="size_icon_xl">27dp</dimen>
+
+    <dimen name="empty_cart_icon_width">138.dp</dimen>
+    <dimen name="empty_cart_icon_height">126.dp</dimen>
+
+    <dimen name="product_details_image_width">353dp</dimen>
+    <dimen name="product_details_image_height">341dp</dimen>
+
 </resources>

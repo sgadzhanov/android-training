@@ -11,6 +11,7 @@ val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
 
 val BrightPurple = Color(0xFF722ED8)
+val Pink = Color(0xFFA37EDA)
 val DisabledButton = Color(0xFFC4C4C4)
 val Violet = Color(0xFF47337A)
 val PurpleRatingStar = Color(0xFF67548B)
