@@ -45,7 +45,7 @@ fun LoginPasswordTextField(
         },
         label = {
             Text(
-                text = stringResource(id = R.string.PASSWORD),
+                text = stringResource(id = R.string.password),
                 style = TextStyle(color = Black)
             )
         },
@@ -56,7 +56,7 @@ fun LoginPasswordTextField(
             focusedContainerColor = Color.Transparent,
         ),
         isError = !isValidPassword,
-        textStyle = TextStyle(fontSize = dimensionResource(id = R.dimen.FONT_SIZE_MEDIUM).value.sp),
+        textStyle = TextStyle(fontSize = dimensionResource(id = R.dimen.font_size_medium).value.sp),
         singleLine = true,
         visualTransformation = if (isVisible) VisualTransformation.None else PasswordVisualTransformation(),
         trailingIcon = {

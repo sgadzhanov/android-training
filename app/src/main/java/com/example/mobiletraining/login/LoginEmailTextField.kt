@@ -24,9 +24,9 @@ fun LoginEmailTextField(
     OutlinedTextField(
         modifier = modifier
             .fillMaxWidth()
-            .padding(bottom = dimensionResource(id = R.dimen.PADDING_LARGE)),
+            .padding(bottom = dimensionResource(id = R.dimen.padding_large)),
         value = "",
-        label = { Text(text = stringResource(id = R.string.EMAIL)) },
+        label = { Text(text = stringResource(id = R.string.email)) },
         colors = TextFieldDefaults.colors(
             errorIndicatorColor = ErrorColor,
             errorContainerColor = Color.Transparent,

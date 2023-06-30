@@ -3,6 +3,7 @@ package com.example.mobiletraining
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -45,6 +46,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.firsttask.R
+import com.example.mobiletraining.destinations.CartDestination
 import com.example.mobiletraining.destinations.HomeDestination
 import com.example.mobiletraining.models.ProductModel
 import com.example.mobiletraining.models.viewmodels.ProductViewModel
@@ -52,6 +54,7 @@ import com.example.mobiletraining.ui.theme.Black
 import com.example.mobiletraining.ui.theme.Black80
 import com.example.mobiletraining.ui.theme.DarkGray
 import com.example.mobiletraining.ui.theme.Green
+import com.example.mobiletraining.ui.theme.PurpleRatingStar
 import com.example.mobiletraining.ui.theme.Violet
 import com.example.mobiletraining.ui.theme.White
 import com.example.mobiletraining.utils.RatingStars
@@ -60,8 +63,7 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.math.BigDecimal
-import java.text.DecimalFormat
+import com.example.mobiletraining.utils.asFormattedString
 
 @Destination
 @OptIn(ExperimentalMaterial3Api::class)
@@ -81,13 +83,13 @@ fun ProductDetails(id: String, destinationsNavigator: DestinationsNavigator) {
             CenterAlignedTopAppBar(
                 modifier = Modifier
                     .padding(
-                        start = dimensionResource(id = R.dimen.PADDING_MEDIUM),
-                        end = dimensionResource(id = R.dimen.PADDING_TOP_APP_BAR_END)
+                        start = dimensionResource(id = R.dimen.padding_medium),
+                        end = dimensionResource(id = R.dimen.padding_top_app_bar_end)
                     )
                     .fillMaxWidth(),
                 title = {
                     Text(
-                        text = stringResource(id = R.string.ITEM_TOPBAR),
+                        text = stringResource(id = R.string.item_topbar),
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
@@ -96,10 +98,10 @@ fun ProductDetails(id: String, destinationsNavigator: DestinationsNavigator) {
                     IconButton(onClick = { destinationsNavigator.navigate(HomeDestination) }) {
                         Icon(
                             Icons.Default.ArrowBack,
-                            contentDescription = stringResource(id = R.string.BACK_ICON_DESCRIPTION),
+                            contentDescription = stringResource(id = R.string.back_icon_description),
                             modifier = Modifier.size(
-                                width = dimensionResource(id = R.dimen.SIZE_ICON_MEDIUM),
-                                height = dimensionResource(id = R.dimen.SIZE_ICON_MEDIUM)
+                                width = dimensionResource(id = R.dimen.size_icon_medium),
+                                height = dimensionResource(id = R.dimen.size_icon_medium)
                             )
                         )
                     }
@@ -108,24 +110,29 @@ fun ProductDetails(id: String, destinationsNavigator: DestinationsNavigator) {
                     Box {
                         Icon(
                             imageVector = Icons.Default.ShoppingCart,
-                            contentDescription = stringResource(id = R.string.BAG_ICON_DESCRIPTION),
-                            modifier = Modifier.size(
-                                width = dimensionResource(id = R.dimen.SIZE_ICON_LARGE),
-                                height = dimensionResource(id = R.dimen.SIZE_ICON_LARGE),
-                            )
-                        )
-                        Box(
+                            contentDescription = stringResource(id = R.string.bag_icon_description),
                             modifier = Modifier
-                                .size(dimensionResource(id = R.dimen.SIZE_MEDIUM))
-                                .background(Color(0xFF67548B), CircleShape)
-                                .align(Alignment.TopEnd)
-                        ) {
-                            Text(
-                                text = "3", //TODO
-                                color = White,
-                                fontSize = dimensionResource(id = R.dimen.FONT_SIZE_XS).value.sp,
-                                modifier = Modifier.align(Alignment.Center)
-                            )
+                                .size(
+                                    width = dimensionResource(id = R.dimen.size_icon_large),
+                                    height = dimensionResource(id = R.dimen.size_icon_large),
+                                )
+                                .clickable { destinationsNavigator.navigate(CartDestination) }
+                        )
+                        val productsCount = GlobalState.cartProducts.size
+                        if (productsCount != 0) {
+                            Box(
+                                modifier = Modifier
+                                    .size(dimensionResource(id = R.dimen.size_medium))
+                                    .background(color = PurpleRatingStar, CircleShape)
+                                    .align(Alignment.TopEnd)
+                            ) {
+                                Text(
+                                    text = productsCount.toString(),
+                                    color = White,
+                                    fontSize = dimensionResource(id = R.dimen.font_size_xs).value.sp,
+                                    modifier = Modifier.align(Alignment.Center)
+                                )
+                            }
                         }
                     }
                 }
@@ -140,12 +147,12 @@ fun ProductDetails(id: String, destinationsNavigator: DestinationsNavigator) {
                     Image(
                         painter = painterResource(R.drawable.pd_background),
                         modifier = Modifier.fillMaxSize(),
-                        contentDescription = stringResource(id = R.string.BACKGROUND_IMAGE_DESCRIPTION),
+                        contentDescription = stringResource(id = R.string.background_image_description),
                         contentScale = ContentScale.Crop,
                     )
                     Column(
                         modifier = Modifier
-                            .padding(horizontal = dimensionResource(id = R.dimen.PADDING_PRODUCT_IMAGE_HORIZONTAL))
+                            .padding(horizontal = dimensionResource(id = R.dimen.padding_product_image_horizontal))
                             .fillMaxSize()
                     ) {
                         Box {
@@ -156,20 +163,20 @@ fun ProductDetails(id: String, destinationsNavigator: DestinationsNavigator) {
                             Row(
                                 modifier = Modifier
                                     .align(Alignment.TopEnd)
-                                    .padding(dimensionResource(id = R.dimen.PADDING_XL))
+                                    .padding(dimensionResource(id = R.dimen.padding_xl))
                                     .background(Color.Transparent)
                                     .border(
-                                        width = dimensionResource(id = R.dimen.WIDTH_TINY_BORDER),
+                                        width = dimensionResource(id = R.dimen.width_tiny_border),
                                         color = Color.Transparent,
-                                        shape = RoundedCornerShape(dimensionResource(id = R.dimen.ROUNDED_CORNER_SHAPE))
+                                        shape = RoundedCornerShape(dimensionResource(id = R.dimen.rounded_corner_shape))
                                     )
                                     .background(
                                         color = White,
-                                        shape = RoundedCornerShape(dimensionResource(id = R.dimen.ROUNDED_CORNER_SHAPE))
+                                        shape = RoundedCornerShape(dimensionResource(id = R.dimen.rounded_corner_shape))
                                     )
-                                    .padding(vertical = dimensionResource(id = R.dimen.PADDING_MEDIUM))
-                                    .padding(end = dimensionResource(id = R.dimen.PADDING_XXL))
-                                    .padding(start = dimensionResource(id = R.dimen.PADDING_LARGE_PLUS)),
+                                    .padding(vertical = dimensionResource(id = R.dimen.padding_medium))
+                                    .padding(end = dimensionResource(id = R.dimen.padding_xxl))
+                                    .padding(start = dimensionResource(id = R.dimen.padding_large_plus)),
                                 verticalAlignment = CenterVertically,
                                 horizontalArrangement = Arrangement.Center,
                             ) {
@@ -177,68 +184,79 @@ fun ProductDetails(id: String, destinationsNavigator: DestinationsNavigator) {
                                     imageVector = Icons.Default.CheckCircle,
                                     contentDescription = null,
                                     tint = Green,
-                                    modifier = Modifier.size(dimensionResource(id = R.dimen.SIZE_ICON_SMALL)),
+                                    modifier = Modifier.size(dimensionResource(id = R.dimen.size_icon_small)),
                                 )
                                 Text(
-                                    text = stringResource(id = R.string.IN_STOCK_MESSAGE),
+                                    text = stringResource(id = R.string.in_stock_message),
                                     color = Black,
-                                    fontSize = dimensionResource(id = R.dimen.FONT_SIZE_MEDIUM).value.sp,
-                                    modifier = Modifier.padding(start = dimensionResource(id = R.dimen.PADDING_MEDIUM))
+                                    fontSize = dimensionResource(id = R.dimen.font_size_medium).value.sp,
+                                    modifier = Modifier.padding(start = dimensionResource(id = R.dimen.padding_medium))
                                 )
                             }
                         }
                         Row(
                             modifier = Modifier
                                 .align(alignment = Alignment.CenterHorizontally)
-                                .padding(top = dimensionResource(id = R.dimen.PADDING_LARGE_PLUS))
-                                .padding(bottom = dimensionResource(id = R.dimen.PADDING_XS))
+                                .padding(top = dimensionResource(id = R.dimen.padding_large_plus))
+                                .padding(bottom = dimensionResource(id = R.dimen.padding_xs))
                         ) {
                             Text(
                                 text = product.title,
                                 style = TextStyle(
                                     fontWeight = FontWeight.Bold,
-                                    fontSize = dimensionResource(id = R.dimen.FONT_SIZE_MEDIUM).value.sp
+                                    fontSize = dimensionResource(id = R.dimen.font_size_medium).value.sp
                                 )
                             )
                             Spacer(Modifier.weight(1f))
                             RatingStars(rating = product.rating)
                         }
                         Text(
-                            text = stringResource(id = R.string.CATEGORY_MESSAGE) + product.category,
+                            text = stringResource(id = R.string.category_message) + product.category,
                             style = TextStyle(
                                 fontWeight = FontWeight.Normal,
-                                fontSize = dimensionResource(id = R.dimen.FONT_SIZE_SMALL).value.sp,
+                                fontSize = dimensionResource(id = R.dimen.font_size_small).value.sp,
                                 color = DarkGray,
                             )
                         )
 
                         Text(
                             modifier = Modifier
-                                .padding(top = dimensionResource(id = R.dimen.PADDING_TOP_PRODUCT_DESCRIPTION))
-                                .padding(bottom = dimensionResource(id = R.dimen.PADDING_BOTTOM_PRODUCT_DESCRIPTION)),
+                                .padding(top = dimensionResource(id = R.dimen.padding_top_product_description))
+                                .padding(bottom = dimensionResource(id = R.dimen.padding_bottom_product_description)),
                             text = product.description,
                             style = TextStyle(
                                 color = Black80,
-                                fontSize = dimensionResource(id = R.dimen.FONT_SIZE_MEDIUM).value.sp,
+                                fontSize = dimensionResource(id = R.dimen.font_size_medium).value.sp,
                                 textAlign = TextAlign.Left,
                             )
                         )
-                        val formattedPrice = DecimalFormat("0.00").format(product.price)
+                        val formattedPrice = product.price.asFormattedString()
                         Text(
-                            text = "${stringResource(id = R.string.DOLLAR_SIGN)}$formattedPrice",
+                            text = "${stringResource(id = R.string.dollar_sign)}$formattedPrice",
                             style = TextStyle(
                                 fontWeight = FontWeight.Bold,
-                                fontSize = dimensionResource(id = R.dimen.FONT_SIZE_LARGE).value.sp,
+                                fontSize = dimensionResource(id = R.dimen.font_size_xl).value.sp,
                             )
                         )
+                        val productToAdd = ProductModel(
+                            id = product.id,
+                            title = product.title,
+                            description = product.description,
+                            short_description = product.short_description,
+                            stock = product.stock,
+                            price = product.price,
+                            rating = product.rating,
+                            image = product.image,
+                            category = product.category,
+                        )
                         Button(
-                            onClick = { /*TODO*/ },
+                            onClick = { GlobalState.addProduct(productToAdd) },
                             modifier = Modifier
-                                .width(dimensionResource(id = R.dimen.WIDTH_ADD_BUTTON))
-                                .padding(top = dimensionResource(id = R.dimen.PADDING_TOP_ADD_BUTTON)),
+                                .width(dimensionResource(id = R.dimen.width_add_button))
+                                .padding(top = dimensionResource(id = R.dimen.padding_top_add_button)),
                             colors = ButtonDefaults.buttonColors(Violet)
                         ) {
-                            Text(text = stringResource(id = R.string.ADD_TO_CART))
+                            Text(text = stringResource(id = R.string.add_to_cart))
                         }
                     }
                 }

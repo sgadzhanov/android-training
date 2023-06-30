@@ -31,7 +31,6 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.firsttask.R
 import com.example.mobiletraining.destinations.HomeDestination
-import com.example.mobiletraining.models.UserRequest
 import com.example.mobiletraining.models.viewmodels.UserViewModel
 import com.example.mobiletraining.ui.theme.DisabledButton
 import com.example.mobiletraining.ui.theme.Violet
@@ -51,63 +50,57 @@ annotation class LoginNavGraph(
 @Composable
 fun LoginScreen(destinationsNavigator: DestinationsNavigator) {
     val userViewModel: UserViewModel = hiltViewModel()
-
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
+    val user = userViewModel.user
+    var email by remember { mutableStateOf("test@test.com") }
+    var password by remember { mutableStateOf("test123") }
     val emailIsValid by remember { mutableStateOf(true) }
     val passwordIsValid by remember { mutableStateOf(true) }
 
-    LaunchedEffect(userViewModel.user) {
-        userViewModel.user.let { res ->
-            res?.onSuccess {
-                destinationsNavigator.navigate(
-                    HomeDestination
-                )
-            }
-        }
+    LaunchedEffect(user) {
+        user?.let { destinationsNavigator.navigate(HomeDestination) }
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
         Image(
             modifier = Modifier.fillMaxSize(),
             painter = painterResource(R.drawable.login__background),
-            contentDescription = stringResource(id = R.string.BACKGROUND_IMAGE_DESCRIPTION),
+            contentDescription = stringResource(id = R.string.background_image_description),
             contentScale = ContentScale.Crop,
         )
         Column(
             modifier = Modifier
-                .padding(dimensionResource(id = R.dimen.PADDING_MEDIUM))
-                .padding(horizontal = dimensionResource(id = R.dimen.PADDING_MEDIUM_PLUS))
-                .padding(top = dimensionResource(id = R.dimen.PADDING_LOGO_TOP)),
+                .padding(dimensionResource(id = R.dimen.padding_medium))
+                .padding(horizontal = dimensionResource(id = R.dimen.padding_medium_plus))
+                .padding(top = dimensionResource(id = R.dimen.padding_logo_top)),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
         ) {
             Image(
                 modifier = Modifier.padding(
-//                    bottom = dimensionResource(id = R.dimen.PADDING_LOGO_BOTTOM)
+                    bottom = dimensionResource(id = R.dimen.padding_logo_bottom)
                 ),
                 painter = painterResource(id = R.drawable.logo),
-                contentDescription = stringResource(id = R.string.LOGO_IMAGE_DESCRIPTION),
+                contentDescription = stringResource(id = R.string.logo_image_description),
             )
             LoginTitle(
                 modifier = Modifier
                     .padding(
-                        top = dimensionResource(id = R.dimen.PADDING_LOGIN_TITLE_TOP),
-                        bottom = dimensionResource(id = R.dimen.PADDING_LARGE)
+                        top = dimensionResource(id = R.dimen.padding_login_title_top),
+                        bottom = dimensionResource(id = R.dimen.padding_large)
                     )
-                    .padding(horizontal = dimensionResource(id = R.dimen.PADDING_LARGE))
+                    .padding(horizontal = dimensionResource(id = R.dimen.padding_large))
             )
 
             LoginEmailTextField(
                 modifier = Modifier
-                    .padding(bottom = dimensionResource(id = R.dimen.PADDING_LARGE))
-                    .padding(horizontal = dimensionResource(id = R.dimen.PADDING_MEDIUM_PLUS)),
+                    .padding(bottom = dimensionResource(id = R.dimen.padding_large))
+                    .padding(horizontal = dimensionResource(id = R.dimen.padding_medium_plus)),
                 email = email,
                 setEmailValue = { email = it },
                 isValidEmail = emailIsValid,
             )
             LoginPasswordTextField(
-                modifier = Modifier.padding(horizontal = dimensionResource(id = R.dimen.PADDING_MEDIUM_PLUS)),
+                modifier = Modifier.padding(horizontal = dimensionResource(id = R.dimen.padding_medium_plus)),
                 password = password,
                 setPassword = { password = it },
                 isValidPassword = passwordIsValid,
@@ -116,18 +109,18 @@ fun LoginScreen(destinationsNavigator: DestinationsNavigator) {
             if (!emailIsValid || !passwordIsValid) {
                 LoginErrorMessage(
                     modifier = Modifier.padding(
-                        start = dimensionResource(id = R.dimen.PADDING_LARGE),
-                        top = dimensionResource(id = R.dimen.PADDING_LARGE)
+                        start = dimensionResource(id = R.dimen.padding_large),
+                        top = dimensionResource(id = R.dimen.padding_large)
                     )
                 )
             }
 
             LoginButton(
                 modifier = Modifier
-                    .padding(top = dimensionResource(id = R.dimen.PADDING_LOGIN_BUTTON_TOP))
-                    .width(dimensionResource(id = R.dimen.LOGIN_BUTTON_WIDTH)),
+                    .padding(top = dimensionResource(id = R.dimen.padding_login_button_top))
+                    .width(dimensionResource(id = R.dimen.login_button_width)),
                 isLoading = userViewModel.isLoading,
-                clickHandler = { userViewModel.login(UserRequest(email, password)) }
+                clickHandler = { userViewModel.login(email, password) }
             )
         }
     }
@@ -137,9 +130,9 @@ fun LoginScreen(destinationsNavigator: DestinationsNavigator) {
 private fun LoginTitle(modifier: Modifier) {
     Text(
         modifier = modifier.fillMaxWidth(),
-        text = stringResource(id = R.string.LOGIN_TEXT),
+        text = stringResource(id = R.string.login_text),
         style = TextStyle(
-            fontSize = dimensionResource(id = R.dimen.FONT_SIZE_XXL).value.sp,
+            fontSize = dimensionResource(id = R.dimen.font_size_xxl).value.sp,
             fontWeight = FontWeight.ExtraBold,
             color = Violet,
             textAlign = TextAlign.Left
@@ -164,7 +157,7 @@ private fun LoginButton(
         enabled = !isLoading,
     ) {
         Text(
-            text = stringResource(id = R.string.LOGIN_TEXT),
+            text = stringResource(id = R.string.login_text),
             style = TextStyle(fontWeight = FontWeight.Bold),
         )
     }

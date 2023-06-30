@@ -34,11 +34,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
 import com.example.firsttask.R
 import com.example.mobiletraining.models.viewmodels.ProductsViewModel
 import com.example.mobiletraining.ui.theme.Black
 import com.example.mobiletraining.ui.theme.BrightPurple
+import com.example.mobiletraining.ui.theme.DarkGray
 import com.example.mobiletraining.ui.theme.Violet
+import com.example.mobiletraining.utils.constants.Constants.CategoriesFilterConstants.not_rotated
+import com.example.mobiletraining.utils.constants.Constants.CategoriesFilterConstants.rotated
+import com.example.mobiletraining.utils.constants.Constants.Shared.spacer_weight
+import com.example.mobiletraining.utils.constants.Constants.Shared.width_90
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -50,14 +56,13 @@ fun CategoriesFilter(
 ) {
     var isToggled by remember { mutableStateOf(false) }
     val rotation = animateFloatAsState(
-        targetValue = if (isToggled) 180f
-        else 0f
+        targetValue = if (isToggled) not_rotated else rotated
     )
 
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = dimensionResource(id = R.dimen.PADDING_XXL))
+            .padding(top = dimensionResource(id = R.dimen.padding_xxl))
     ) {
         Card(
             onClick = { isToggled = !isToggled },
@@ -71,18 +76,25 @@ fun CategoriesFilter(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                Text(
-                    text = stringResource(id = R.string.CATEGORY),
-                    modifier = Modifier
-                        .fillMaxWidth(0.90f),
-                    style = MaterialTheme.typography.titleMedium,
-                )
+                Column {
+                    Text(
+                        text = stringResource(id = R.string.category),
+                        modifier = Modifier
+                            .fillMaxWidth(width_90),
+                        style = MaterialTheme.typography.titleMedium,
+                    )
+                    Text(
+                        text = stringResource(id = R.string.all_categories),
+                        fontSize = dimensionResource(id = R.dimen.font_size_small_plus).value.sp,
+                        color = DarkGray,
+                    )
+                }
                 Icon(
                     imageVector = Icons.Outlined.ExpandMore,
                     tint = BrightPurple,
                     modifier = Modifier
                         .rotate(rotation.value)
-                        .size(dimensionResource(id = R.dimen.SIZE_ICON_LARGE)),
+                        .size(dimensionResource(id = R.dimen.size_icon_large)),
                     contentDescription = null,
                 )
             }
@@ -92,17 +104,19 @@ fun CategoriesFilter(
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = dimensionResource(id = R.dimen.PADDING_LARGE))
+                        .padding(horizontal = dimensionResource(id = R.dimen.padding_large))
                 ) {
                     items(productsViewModel.allCategories.size) { index ->
                         val category = productsViewModel.allCategories[index]
                         val categoryName = category.name
                         Row(
                             modifier = Modifier
-                                .padding(top = dimensionResource(id = R.dimen.PADDING_LARGE_PLUS))
-                                .height(dimensionResource(id = R.dimen.SIZE_XXXL))
+                                .padding(top = dimensionResource(id = R.dimen.padding_large_plus))
+                                .height(dimensionResource(id = R.dimen.size_xxxl))
                                 .clickable {
-                                    if (selectedCategories.contains(categoryName)) deselectCategory(categoryName)
+                                    if (selectedCategories.contains(categoryName)) deselectCategory(
+                                        categoryName
+                                    )
                                     else selectCategory(categoryName)
                                 }
                         ) {
@@ -110,7 +124,7 @@ fun CategoriesFilter(
                                 text = categoryName,
                                 style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Medium)
                             )
-                            Spacer(modifier = Modifier.weight(1f))
+                            Spacer(modifier = Modifier.weight(spacer_weight))
                             Box {
                                 if (selectedCategories.contains(categoryName)) {
                                     Icon(

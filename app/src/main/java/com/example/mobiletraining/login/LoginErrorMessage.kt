@@ -15,7 +15,7 @@ fun LoginErrorMessage(modifier: Modifier) {
     //TODO: thing about the actual design implementation
     Text(
         modifier = modifier.fillMaxWidth(),
-        text = stringResource(id = R.string.VALIDATION_MESSAGE),
+        text = stringResource(id = R.string.validation_message),
         style = TextStyle(
             color = ErrorColor,
             fontSize = 18.sp,

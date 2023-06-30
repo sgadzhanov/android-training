@@ -27,7 +27,7 @@ fun RatingStars(rating: Int) {
             text = rating.toString(),
             style = TextStyle(
                 fontWeight = FontWeight.Bold,
-                fontSize = dimensionResource(id = R.dimen.FONT_SIZE_SMALL_PLUS).value.sp,
+                fontSize = dimensionResource(id = R.dimen.font_size_small_plus).value.sp,
             )
         )
         repeat(rating) {
@@ -35,7 +35,7 @@ fun RatingStars(rating: Int) {
                 Icons.Default.Star,
                 contentDescription = null,
                 modifier = Modifier
-                    .size(dimensionResource(id = R.dimen.SIZE_ICON_XS))
+                    .size(dimensionResource(id = R.dimen.size_icon_xs))
                     .align(Alignment.CenterVertically),
                 tint = PurpleRatingStar,
             )
